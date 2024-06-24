@@ -1,0 +1,27 @@
+.container {
+  @apply grid grid-cols-3 shadow-md pt-5 pb-5 mb-4 text-[19px];
+
+  .subContainer1 {
+    @apply flex col-span-2;
+
+    .navlink {
+        @apply ml-5
+    }
+  }
+
+  .subContainer2 {
+    @apply text-right mr-5;
+
+    .logout {
+        @apply mr-5 
+    }
+
+    .addAdmin {
+        @apply bg-btn text-white px-2 py-3 rounded-md hover:bg-btnHover
+    }
+  }
+
+  .navHover {
+    @apply hover:text-btnHover
+  }
+}

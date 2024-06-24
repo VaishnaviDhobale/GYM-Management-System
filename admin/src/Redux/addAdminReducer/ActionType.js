@@ -1,0 +1,6 @@
+// Action types for admins
+export const REQUEST_START = 'REQUEST_START';
+export const GET_ADMIN_SUCCESS = 'GET_ADMIN_SUCCESS';
+export const REQUEST_FAILURE = 'REQUEST_FAILURE';
+export const POST_ADMIN_SUCCESS = 'POST_ADMIN_SUCCESS';
+export const DELETE_ADMIN_SUCCESS = 'DELETE_ADMIN_SUCCESS';

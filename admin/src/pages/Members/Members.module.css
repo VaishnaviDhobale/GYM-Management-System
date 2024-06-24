@@ -1,0 +1,115 @@
+.container {
+  @apply p-0 m-5 ml-7 mt-5;
+
+  /* Details container  */
+  .detailsContainer {
+    @apply p-0 flex justify-between mt-10;
+
+    .search {
+      @apply border border-b outline-none px-2 py-1 rounded-md w-96;
+    }
+
+    .rightDetails {
+      @apply flex relative;
+
+      .detailsBtns {
+        @apply bg-btn text-white rounded-md px-3 py-1 mr-2;
+      }
+      
+      .allMembers {
+        @apply bg-gray-300 rounded-lg flex justify-center items-center px-3 py-1 font-bold;
+      }
+
+      .msgToAllContainer {
+        @apply p-10 shadow-lg absolute right-[280px] top-6 bg-gray-200 rounded-lg rounded-tr-none w-[400px];
+
+        .msgToAllForm {
+          @apply p-0;
+
+          select {
+            @apply w-[100%] border mb-4 p-2 outline-none;
+          }
+          input {
+            @apply border outline-none mb-4 w-[100%] px-4 py-2;
+          }
+
+          textarea {
+            @apply mb-3 border outline-none w-[100%] px-4 py-2;
+          }
+          .sendAllMsgBtn {
+            @apply bg-btn text-white font-bold px-3 py-3 cursor-pointer hover:bg-btnHover;
+          }
+        }
+
+        .cross {
+          @apply bg-red-600 font-bold text-[25px] text-white cursor-pointer inline-block relative bottom-8 left-[325px] rounded-full hover:bg-red-500;
+        }
+      }
+    }
+  }
+
+  /* Note for Id  */
+  .note {
+    @apply mt-5 text-green-500 font-bold;
+  }
+
+  /*  Table  */
+  .tableContainer {
+    @apply p-0;
+    table {
+      @apply border-collapse w-[100%] mt-10;
+
+      thead {
+        @apply bg-btn text-white font-bold;
+      }
+
+      thead tr {
+        @apply p-5 border-b mb-5;
+      }
+      thead th {
+        @apply p-4;
+      }
+
+      /* tbody  */
+      .sendBtn {
+        @apply bg-btn px-3 py-1 text-white rounded-md hover:bg-btnHover;
+
+        .sendBtnIcon {
+          @apply flex justify-center items-center;
+        }
+      }
+
+      tbody tr .del {
+        @apply bg-red-700 px-3 py-1 rounded-md hover:bg-red-600;
+
+        .delIcon {
+          @apply text-white;
+        }
+      }
+
+      tbody tr .edit {
+        @apply bg-btn px-3 py-1 rounded-md hover:bg-btnHover;
+
+        .editIcon {
+          @apply text-white;
+        }
+      }
+
+      tbody tr .action {
+        @apply flex justify-evenly;
+      }
+
+      tbody th {
+        @apply p-[12px];
+      }
+
+      tbody {
+        @apply bg-gray-300;
+
+        .memberId {
+          @apply text-left;
+        }
+      }
+    }
+  }
+}
