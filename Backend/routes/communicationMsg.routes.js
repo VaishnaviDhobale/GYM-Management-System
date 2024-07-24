@@ -7,7 +7,7 @@ const msgRouter = express.Router();
 msgRouter.route("/sendMsg").post(sendMsg);
 msgRouter.route("/").get(getMsgs);
 msgRouter.route("/deleteMsg/:id").delete(deleteMsg);
-msgRouter.route("/updateMsg/:id").put(updateMsg);
+msgRouter.route("/updateMsg/:id").patch(updateMsg);
 
 
 module.exports = {

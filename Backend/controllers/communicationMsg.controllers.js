@@ -58,8 +58,8 @@ const deleteMsg = async (req, res) => {
 const updateMsg = async (req, res) => {
   try {
     const id = req.params.id;
+    console.log(req.body);
     const response = await MsgModel.findOneAndUpdate({ _id: id }, req.body);
-    console.log(response);
     if (response) {
       res.status(200).send({success : `Message updated successfully with this id ${id}`});
     } else {

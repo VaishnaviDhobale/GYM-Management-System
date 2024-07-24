@@ -6,23 +6,34 @@ const packageSchema = mongoose.Schema({
         required: true,
     },
     durationInMonths: {
-        type: Number,
+        type: String,
         required: true,
     },
     price: {
-        type: Number,
+        type: String,
+        required: true,
+    },
+    originalPrice: {
+        type: String,
         required: true,
     },
     description: {
         type: String,
+        required: true,
     },
     features: {
         type: [String], 
+        required: true,
     },
     discount: {
-        type: Number, 
+        type: String, 
         default: 0,
+        required: true,
     },
+    thumbnail : {
+       type : String,
+       require : true
+      },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId, // Reference to the admin who created the package
         ref: 'adminAuth',

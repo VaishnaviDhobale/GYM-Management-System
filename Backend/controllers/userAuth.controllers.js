@@ -133,11 +133,21 @@ const deleteUser = async (req, res) => {
     }
   };
 
+  // Delete All users 
+  const deleteAllUsers = async (req, res) => {
+    try {
+      await UserModel.deleteMany({});
+      res.status(200).send({ success: 'All users deleted successfully' });
+    } catch (error) {
+      res.status(500).send({ error: 'Failed to delete all users',details: error.message });
+    }
+  };
 module.exports = {
   addUser,
   loginUser,
   allUserData,
   updateUser,
   userByEmail,
-  deleteUser
+  deleteUser,
+  deleteAllUsers
 };

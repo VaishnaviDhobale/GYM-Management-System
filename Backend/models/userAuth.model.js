@@ -24,12 +24,12 @@ const userSchema = mongoose.Schema({
 
   DOB: {
     type: Date,
-    required: true,
+    // required: true,
   },
 
   gender: {
     type: String,
-    required: true,
+    // required: true,
   },
 
   createdAt: {

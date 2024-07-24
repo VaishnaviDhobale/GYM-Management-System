@@ -16,17 +16,18 @@ const addMember = async (req, res) => {
   }
 };
 
+
 // Get all members
 const getAllMembers = async (req, res) => {
   try {
     const members = await MemberModel.find().populate("createdBy");
-    if (members && members.length > 0) {
+    // if (members && members.length > 0) {
       res.status(200).send(members);
-    } else {
-      res
-        .status(400)
-        .send({ error: "No members found. Please add members first." });
-    }
+    // } else {
+    //   res
+    //     .status(400)
+    //     .send({ error: "No members found. Please add members first." });
+    // }
   } catch (error) {
     res.status(500).send({
       error: "An error occurred while finding members.",
@@ -97,10 +98,21 @@ const deleteMember = async (req, res) => {
   }
 };
 
+// Delete All members 
+const deleteAllMembers = async (req, res) => {
+  try {
+    await MemberModel.deleteMany({});
+    res.status(200).send({ success: 'All members deleted successfully' });
+  } catch (error) {
+    res.status(500).send({ error: 'Failed to delete all members',details: error.message });
+  }
+};
+
 module.exports = {
   addMember,
   getAllMembers,
   getMemberById,
   updateMember,
   deleteMember,
+  deleteAllMembers
 };

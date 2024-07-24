@@ -7,13 +7,13 @@ const { MemberModel } = require("../models/members.models");
 const getBlockMembers = async (req, res) => {
   try {
     const blockedMembers = await BlockMembersModel.find().populate("createdBy");
-    if (blockedMembers.length > 0) {
+    // if (blockedMembers.length > 0) {
       res.status(200).send(blockedMembers);
-    } else {
-      res
-        .status(400)
-        .send({ error: "There are currently no members in the block list." });
-    }
+    // } else {
+    //   res
+    //     .status(400)
+    //     .send({ error: "There are currently no members in the block list." });
+    // }
   } catch (error) {
     res.status(500).send({
       error: "An error occurred while getting blocked members.",
