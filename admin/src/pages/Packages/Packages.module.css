@@ -1,0 +1,143 @@
+.container {
+  @apply border lg:grid lg:grid-cols-5 gap-10 m-5;
+
+  .packagesContainer {
+    @apply shadow-md col-span-3 p-5 bg-white;
+
+    .topPackageButtonContainer{
+        @apply sticky top-[90px] bg-white pb-6
+    }
+
+    .search {
+      @apply p-0 flex gap-10;
+    }
+
+    .search input {
+      @apply border outline-none p-4 w-full text-[20px];
+    }
+
+    .packages {
+      @apply  p-0 max-h-[100%] overflow-y-auto;
+
+      /* Hide the scrollbar */
+      /* scrollbar-width: none; 
+      -ms-overflow-style: none;  */
+
+      .package {
+        @apply mt-10 lg:grid lg:grid-cols-5 gap-6 shadow-lg;
+
+        .image {
+          @apply col-span-2 h-full w-full;
+
+          .img {
+            @apply h-full w-full object-cover;
+          }
+        }
+        .data {
+          @apply col-span-3 py-6;
+
+          .info {
+            @apply p-0;
+
+            .topData {
+              @apply p-0 flex justify-between items-center gap-10;
+              .infoName {
+                @apply text-[25px] md:text-[30px] font-bold;
+              }
+              .duration {
+                @apply bg-green-700 p-1 text-white font-bold rounded-md mr-3 px-5;
+              }
+            }
+
+            .infoDescription {
+              @apply text-[19px];
+            }
+
+            .infoPrices {
+              @apply flex gap-4 mt-5 items-center;
+
+              .price {
+                @apply text-green-900 font-bold text-[20px];
+              }
+
+              .originalPrice {
+                @apply text-gray-500 line-through;
+              }
+            }
+
+            .features {
+              @apply mt-5;
+
+              .allFeatures {
+                @apply flex items-center gap-3 mb-2;
+              }
+
+              .checkSign {
+                @apply text-black font-bold;
+              }
+            }
+          }
+
+          .buttons {
+            @apply p-0 flex gap-4 mt-5;
+
+            .packDelete {
+              @apply bg-red-700 text-white p-2 text-[30px] rounded-md hover:opacity-50;
+            }
+
+            .packEdit {
+              @apply bg-btn text-white p-2 rounded-md text-[30px] hover:opacity-50;
+            }
+          }
+        }
+      }
+    }
+
+    .packageTopButtons {
+      @apply mt-10 flex justify-between items-center;
+
+      .deleteAll {
+        @apply bg-red-700 text-white font-bold p-4 rounded-md cursor-pointer hover:opacity-50 text-[20px];
+      }
+
+      .openAddForm {
+        @apply bg-btn text-white p-4 font-bold text-[20px] hover:opacity-50 rounded-md;
+      }
+    }
+  }
+
+  .formContainer {
+    @apply absolute top-14 left-0 col-span-2 p-5 lg:static;
+
+    /* .addFormContainer{
+        @apply sticky top-[90px] border;
+    }
+
+    .updateFormContainer{
+        @apply sticky top-[90px] border;
+    } */
+
+    .formHeading {
+      @apply flex justify-center mb-4 text-[25px] font-bold ;
+    }
+    .addCross {
+      @apply bg-red-600 text-white p-2 text-[30px] rounded-full hover:opacity-50 cursor-pointer absolute top-5 right-5 md:hidden;
+    }
+
+    .addForm {
+      @apply bg-slate-100 p-4 rounded-md sticky top-[200px];
+
+      .submitBtn {
+        @apply bg-btn text-white font-bold text-[20px] cursor-pointer hover:opacity-50 py-4;
+      }
+    }
+
+    .addForm input,
+    .addForm textarea {
+      @apply w-full outline-none p-3 mb-3 border;
+    }
+    .spinner {
+      @apply bg-btn p-5 text-white flex justify-center items-center text-[20px];
+    }
+  }
+}

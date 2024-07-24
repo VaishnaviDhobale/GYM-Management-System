@@ -1,6 +1,8 @@
 /*  Table  */
 .container {
-    @apply p-0;
+    @apply pr-6;
+
+
     table {
       @apply border-collapse w-[100%] mt-10;
 
@@ -25,23 +27,15 @@
       }
 
       tbody tr .del {
-        @apply bg-red-700 px-3 py-1 rounded-md hover:bg-red-600;
+        @apply bg-red-700 px-3 py-2 rounded-md hover:bg-red-600;
 
         .delIcon {
           @apply text-white;
         }
       }
 
-      tbody tr .edit {
-        @apply bg-btn px-3 py-1 rounded-md hover:bg-btnHover;
-
-        .editIcon {
-          @apply text-white;
-        }
-      }
-
       tbody tr .action {
-        @apply flex justify-evenly;
+        @apply flex gap-10 justify-center items-center;
       }
 
       tbody th {
@@ -53,6 +47,9 @@
 
         .memberId {
           @apply text-left;
+        }
+        .unblockBtn{
+          @apply bg-green-900 text-white px-2 py-2 rounded-md cursor-pointer hover:bg-green-800
         }
       }
     }

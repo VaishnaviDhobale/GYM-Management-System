@@ -1,79 +1,122 @@
 import axios from "axios";
 import {
-  REQUEST_START,
+  GET_REQUEST_START,
   REQUEST_FAILURE,
   GET_MEMBER_SUCCESS,
   POST_MEMBER_SUCCESS,
   DELETE_MEMBER_SUCCESS,
+  DELETE_ALL_MEMBERS_SUCCESS,
+  POST_REQUEST_START,
+  DELETE_ALL_REQUEST_START,
+  DELETE_REQUEST_START,
 } from "./ActionType";
 
 import { baseUrl } from "../../comman";
-import { toast } from "react-toastify";
 
-const adminToken = JSON.parse(localStorage.getItem("admin")).adminToken
+const adminToken = JSON.parse(localStorage.getItem("admin")).adminToken;
 
 export const requestStartAction = () => {
-  return { type: REQUEST_START };
+  console.log("yes coming here")
+  return { type: GET_REQUEST_START };
 };
 
 export const getMembersSuccessAction = (payload) => {
   return { type: GET_MEMBER_SUCCESS, payload };
 };
 
-export const postMemberSuccessAction = (payload)=>{
-    return { type : POST_MEMBER_SUCCESS, payload}
-}
+export const postRequestStart = () => {
+  return { type: POST_REQUEST_START };
+};
+
+export const postMemberSuccessAction = (payload) => {
+  return { type: POST_MEMBER_SUCCESS, payload };
+};
+
+export const deleteRequestStart = () => {
+  return { type: DELETE_REQUEST_START };
+};
+
 
 export const deleteMemberSuccessAction = () => {
-    return { type : DELETE_MEMBER_SUCCESS}
+  return { type: DELETE_MEMBER_SUCCESS };
+};
+
+export const deleteAllRequestStart = () => {
+  return {type : DELETE_ALL_REQUEST_START}
 }
+
+export const deleteAllMembersSuccessAction = () => {
+  return { type: DELETE_ALL_MEMBERS_SUCCESS };
+};
 
 export const requestFailureAction = (error) => {
   return { type: REQUEST_FAILURE, error };
 };
 
-
-
-
-// Get members 
-export const getMembers = () => async(dispatch)=>{
-
-    try{
-
-        dispatch(requestStartAction());
-        const members = await axios.get(`${baseUrl}/member/`, { headers: {
-          'Content-Type': 'application/json',
-          adminToken: adminToken
-        }});
-        dispatch(getMembersSuccessAction(members));
-        return members.data;
-
-    }catch(error){
-      const status = error.response.status;
-      if(status===500){
-        dispatch(requestFailureAction())
-      }
-      return { status, error: error.response.data.error.message };
-    }
-
-}
-
-// Delete member 
-export const deleteMember = (payload) => async(dispatch) => {
-  try{
-
-    dispatch(requestStartAction())
-    const response = await axios.delete(`${baseUrl}/member/deleteMember/${payload}`, {headers : {
-      "Content-Type" : "application/json",
-      adminToken : adminToken
-    }});
-    dispatch(deleteMemberSuccessAction ());
-    return response
-  }catch(error){
+// Get members
+export const getMembers = () => async (dispatch) => {
+  try {
+    dispatch(requestStartAction());
+    const members = await axios.get(`${baseUrl}/member/`, {
+      headers: {
+        "Content-Type": "application/json",
+        adminToken: adminToken,
+      },
+    });
+    dispatch(getMembersSuccessAction(members));
+    return members;
+  } catch (error) {
     const status = error.response.status;
-      if(status===500){
-        dispatch(requestFailureAction())
-      }
-      return { status, error: error.response.data.error.message };
+    if (status === 500) {
+      dispatch(requestFailureAction());
+    }
+    return { status, error: error.response.data.error.message };
   }
-}
+};
+
+// Delete member
+export const deleteMembers = (payload) => async (dispatch) => {
+  try {
+    dispatch(deleteRequestStart());
+    const response = await axios.delete(
+      `${baseUrl}/member/deleteMember/${payload}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          adminToken: adminToken,
+        },
+      }
+    );
+    dispatch(deleteMemberSuccessAction());
+    return response;
+  } catch (error) {
+    const status = error.response.status;
+    if (status === 500) {
+      dispatch(requestFailureAction());
+    }
+    return { status, error: error.response.data.error.message };
+  }
+};
+
+// Delete All Members
+export const deleteAllMembers = (adminToken) => async (dispatch) => {
+  try {
+    dispatch(deleteAllRequestStart());
+    const response = await axios.delete(`${baseUrl}/member/deleteAllMembers`, {
+      headers: {
+        "Content-Type": "application/json",
+        adminToken,
+      },
+    });
+
+    dispatch(deleteAllMembersSuccessAction());
+    return response;
+  } catch (error) {
+    const status = error.response.status;
+    if (status === 500) {
+      dispatch(requestFailureAction());
+    }
+    console.log(error);
+    return { status, error: error?.response?.data?.error?.message };
+  }
+};

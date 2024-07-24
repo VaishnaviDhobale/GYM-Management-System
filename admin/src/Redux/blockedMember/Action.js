@@ -2,9 +2,9 @@ import axios from "axios";
 import {
   REQUEST_FAILURE,
   REQUEST_START,
-  GET_BLOCKED_USER_SUCCESS,
+  GET_BLOCKED_MEMBERS_SUCCESS,
   BLOCK_MEMBER_SUCCESS,
-  UNBLOCK_USER_SUCCESS,
+  UNBLOCK_MEMBER_SUCCESS,
 } from "./ActionType";
 import { baseUrl } from "../../comman";
 
@@ -14,7 +14,7 @@ export const requestStartAction = () => {
 };
 
 export const getBlockMemberSuccessAction = (payload) => {
-  return { type: GET_BLOCKED_USER_SUCCESS, payload };
+  return { type: GET_BLOCKED_MEMBERS_SUCCESS, payload };
 };
 
 export const blockMemberSuccessAction = (payload) => {
@@ -22,12 +22,14 @@ export const blockMemberSuccessAction = (payload) => {
 };
 
 export const unblockMemberSuccessAction = () => {
-  return { type: UNBLOCK_USER_SUCCESS };
+  return { type: UNBLOCK_MEMBER_SUCCESS };
 };
 
 export const requestFailureAction = (error) => {
   return { type: REQUEST_FAILURE, error };
 };
+
+
 
 // Get blocked members
 export const getBlockedMembers = () => async(dispatch) => {
@@ -46,16 +48,32 @@ export const getBlockedMembers = () => async(dispatch) => {
 };
 
 // Block members 
-export const blockMember = (payload) => async(dispatch) =>{
+export const blockMembers = (payload) => async(dispatch) =>{
   try{  
     dispatch(requestStartAction());
     const response = await axios.post(`${baseUrl}/blockMembers/block`, payload);
-    dispatch(blockMemberSuccessAction());
+    response.status===200 && dispatch(blockMemberSuccessAction());
     return response
   }catch(error){
     const status = error.response.status;
     if(status===500){
       dispatch(requestFailureAction())
+    }
+    return { status, error: error.response.data.error.message };
+  }
+}
+
+// Unblock members
+export const unblockMembers = (payload) => async(dispatch) => {
+  try{
+    dispatch(requestStartAction());
+    const response = await axios.post(`${baseUrl}/blockMembers/unblock`,payload);
+    response.status===200 && dispatch(unblockMemberSuccessAction());
+    return response;
+  }catch(error){
+    const status = error.response.status;
+    if(status===500){
+      dispatch(requestFailureAction());
     }
     return { status, error: error.response.data.error.message };
   }

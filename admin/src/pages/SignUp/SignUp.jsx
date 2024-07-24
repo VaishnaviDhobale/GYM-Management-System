@@ -25,7 +25,7 @@ export const SignUp = () => {
   const dispatch = useDispatch();
 
  
-  //   Handle Form input
+  // Handle Form input
   const handleInput = (event) => {
     const { name, value } = event.target;
     event.preventDefault();
@@ -52,12 +52,13 @@ export const SignUp = () => {
       return error
     }
   }
-  //   Clear form
+
+  // Clear form
   const handleReset = () => {
     formRef.current.reset();
   };
 
-   //   Handle form submit
+   // Handle form submit
    const handleSubmit = async (event) => {
     event.preventDefault();
 

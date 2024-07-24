@@ -3,6 +3,9 @@ import { Login } from "./Login/Login";
 import { SignUp } from "./SignUp/SignUp";
 import {HomePage} from "./HomePage/HomePage"
 import { Members } from "./Members/Members";
+import { Messages } from "./Messages/Messages";
+import { Users } from "./Users/Users";
+import { Packages } from "./Packages/Packages";
 
 export const MainRoutes = () => {
   return (
@@ -13,6 +16,9 @@ export const MainRoutes = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/members" element = {<Members />} />
+        <Route path="/messages" element = {<Messages />} />
+        <Route path="/users" element = {<Users />} />
+        <Route path="/packages" element = {<Packages />} />
       </Routes>
     </>
   );

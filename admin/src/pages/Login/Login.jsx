@@ -40,7 +40,7 @@ export const Login = () => {
               adminId : result.data.adminId
             })
           );
-          navigate("/home");
+          navigate("/members");
         })
         .catch((error) => {
           toast.error(error.response.data.error);
