@@ -10,16 +10,17 @@ import { RxCross2 } from "react-icons/rx";
 import styles from "./Messages.module.css";
 import { RiDeleteBin3Fill, RiFileEditFill } from "react-icons/ri";
 import ReactLoading from "react-loading";
+import Cookies from "js-cookie";
 
 export const Messages = () => {
   const dispatch = useDispatch();
   const [messages, setMessages] = useState([]);
-  const [adminId, setAdminId] = useState(null);
-  const [showEditForm, setShowEditForm] = useState(true);
+  const [adminData, setAdminData] = useState(null);
+  const [showEditForm, setShowEditForm] = useState(false);
   const [msgForUpdate, setMsgForUpdate] = useState({
     message: "",
     type: "",
-    sender: "",
+    // sender: adminData.adminId,
   });
   const msgDetails = useSelector((state) => state.messageDetails);
 
@@ -38,7 +39,7 @@ export const Messages = () => {
   const handleDelete = async (id) => {
     const confirm = window.confirm("Are you sure you want to delete message?");
     if (confirm) {
-      const response = await dispatch(deleteMessages(id));
+      const response = await dispatch(deleteMessages(id,adminData.adminToken));
       if (response?.status === 200) {
         await handleGetMessages();
         toast.success(response?.data?.success);
@@ -53,11 +54,11 @@ export const Messages = () => {
     event.preventDefault();
 
     const response = await dispatch(
-      updateMessages({ ...msgForUpdate, sender: adminId })
+      updateMessages({ ...msgForUpdate, sender: adminData.adminId },adminData.adminToken)
     );
     if (response?.status === 200) {
-      await handleGetMessages();
       toast.success(response?.data?.success);
+      handleGetMessages();
     } else {
       toast.error(response?.error || "Unable to update message.");
     }
@@ -79,15 +80,13 @@ export const Messages = () => {
 
   useEffect(() => {
     handleGetMessages();
-    const adminData = JSON.parse(localStorage.getItem("admin"));
+    const adminData = Cookies.get("admin");
     if (adminData) {
-      setAdminId(adminData.adminId);
-      setMsgForUpdate((prevMsg) => ({
-        ...prevMsg,
-        sender: adminData.adminId,
-      }));
+      setAdminData(JSON.parse(adminData));
     }
   }, []);
+
+  // console.log(messages);
 
   if (msgDetails.isLoading) {
     return (
@@ -97,7 +96,7 @@ export const Messages = () => {
       </div>
     );
   } else if (msgDetails.isError) {
-    return <h1>Error...</h1>;
+    return <h1 className= {styles.error}>An error occurred. Please refresh the page and try again.</h1>;
   }
 
   return (
@@ -127,10 +126,6 @@ export const Messages = () => {
                     <span className={styles.bold}>Message - </span>{" "}
                     {msg.message}
                   </h1>
-                  <h1 className={styles.sender}>
-                    <span className={styles.bold}>Sender - </span>{" "}
-                    {msg.sender.name}
-                  </h1>
 
                   <div className={styles.btns}>
                     <button
@@ -139,16 +134,7 @@ export const Messages = () => {
                         handleDelete(msg._id);
                       }}
                     >
-                      {msgDetails.deleteIsLoading ? (
-                        <ReactLoading
-                          type="spin"
-                          color="white"
-                          height={20}
-                          width={20}
-                        />
-                      ) : (
-                        <RiDeleteBin3Fill className={styles.delIcon} />
-                      )}
+                      <RiDeleteBin3Fill className={styles.delIcon} />
                     </button>
                     <button
                       className={styles.edit}
@@ -158,7 +144,7 @@ export const Messages = () => {
                           _id: msg._id,
                           message: msg.message,
                           type: msg.type,
-                          sender: msg.sender.name,
+                          // sender: msg.sender.name,
                         });
                       }}
                     >
@@ -180,7 +166,7 @@ export const Messages = () => {
             />
           </div>
 
-          {showEditForm && (
+          {showEditForm ? (
             <div className={styles.editMsgForm}>
               <div
                 className={styles.cross}
@@ -218,7 +204,7 @@ export const Messages = () => {
                   <option value="alert">Alert</option>
                 </select>{" "}
                 <br />
-                <input
+                {/* <input
                   type="text"
                   placeholder="Enter id"
                   onChange={(event) => {
@@ -228,26 +214,28 @@ export const Messages = () => {
                     });
                   }}
                   value={msgForUpdate.sender}
+                /> */}
+                <input
+                  type="submit"
+                  value="Update"
+                  // className={styles.updateBtn}
+                  className={`${styles.updateBtn} ${
+                    msgDetails.postIsLoading ? "hidden" : ""
+                  }`}
                 />
-                {msgDetails.updateIsLoading ? (
-                  <div className={styles.updateLoader}>
+                {msgDetails.postIsLoading && (
+                  <div className={styles.spinner}>
                     <ReactLoading
                       type="spin"
                       color="white"
-                      height={30}
-                      width={30}
+                      height={20}
+                      width={20}
                     />
                   </div>
-                ) : (
-                  <input
-                    type="submit"
-                    value="Update"
-                    className={styles.updateBtn}
-                  />
                 )}
               </form>
             </div>
-          )}
+          ): <h1 className={styles.displayMsg}>The update form will appear in this space when you click the update button.</h1>}
         </div>
       </div>
     </>

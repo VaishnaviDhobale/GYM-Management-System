@@ -19,7 +19,7 @@ export const reducer = (state = initialState, { type, payload }) => {
     }
 
     case GET_ADMIN_SUCCESS: {
-      return { ...state, isLoading: false, admins: payload };
+      return { ...state, isLoading: false, admins: payload.data };
     }
     case POST_ADMIN_SUCCESS: {
       return { ...state, isLoading: false };

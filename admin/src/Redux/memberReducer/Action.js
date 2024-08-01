@@ -13,10 +13,8 @@ import {
 
 import { baseUrl } from "../../comman";
 
-const adminToken = JSON.parse(localStorage.getItem("admin")).adminToken;
 
 export const requestStartAction = () => {
-  console.log("yes coming here")
   return { type: GET_REQUEST_START };
 };
 
@@ -54,7 +52,7 @@ export const requestFailureAction = (error) => {
 };
 
 // Get members
-export const getMembers = () => async (dispatch) => {
+export const getMembers = (adminToken) => async (dispatch) => {
   try {
     dispatch(requestStartAction());
     const members = await axios.get(`${baseUrl}/member/`, {
@@ -67,15 +65,37 @@ export const getMembers = () => async (dispatch) => {
     return members;
   } catch (error) {
     const status = error.response.status;
-    if (status === 500) {
-      dispatch(requestFailureAction());
-    }
-    return { status, error: error.response.data.error.message };
+      if (status === 500 || status === 401) {
+        dispatch(requestFailureAction());
+      }
+      return { status, error: error?.response?.data?.error };
   }
 };
 
+// Get member by id 
+export const getMemberById = (id,adminToken) => async(dispatch) => {
+  // console.log(id,adminData.adminToken)
+  try{
+    dispatch(requestStartAction());
+    const response = await axios.get(`${baseUrl}/member/memberById/${id}`,{
+      headers : {
+        "Content-Type" : "application/json",
+        adminToken : adminToken
+      }
+    });
+    dispatch(getMembersSuccessAction(response));
+    return response
+  }catch(error){
+    const status = error.response.status;
+      if (status === 500 || status === 401) {
+        dispatch(requestFailureAction());
+      }
+      return { status, error: error?.response?.data?.error };
+  }
+}
+
 // Delete member
-export const deleteMembers = (payload) => async (dispatch) => {
+export const deleteMembers = (payload,adminToken) => async (dispatch) => {
   try {
     dispatch(deleteRequestStart());
     const response = await axios.delete(
@@ -91,10 +111,10 @@ export const deleteMembers = (payload) => async (dispatch) => {
     return response;
   } catch (error) {
     const status = error.response.status;
-    if (status === 500) {
-      dispatch(requestFailureAction());
-    }
-    return { status, error: error.response.data.error.message };
+      if (status === 500 || status === 401) {
+        dispatch(requestFailureAction());
+      }
+      return { status, error: error?.response?.data?.error };
   }
 };
 
@@ -113,10 +133,9 @@ export const deleteAllMembers = (adminToken) => async (dispatch) => {
     return response;
   } catch (error) {
     const status = error.response.status;
-    if (status === 500) {
-      dispatch(requestFailureAction());
-    }
-    console.log(error);
-    return { status, error: error?.response?.data?.error?.message };
+      if (status === 500 || status === 401) {
+        dispatch(requestFailureAction());
+      }
+      return { status, error: error?.response?.data?.error };
   }
 };

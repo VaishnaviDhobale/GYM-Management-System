@@ -1,5 +1,5 @@
 
-// Action types for message
+// Action types for packages
 export const GET_REQUEST_START = 'GET_REQUEST_START';
 export const GET_PACKAGE_SUCCESS = 'GET_PACKAGE_SUCCESS';
 export const REQUEST_FAILURE = 'REQUEST_FAILURE';

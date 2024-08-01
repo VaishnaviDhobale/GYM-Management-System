@@ -35,7 +35,7 @@
         }
 
         .msg {
-          @apply mt-16;
+          @apply my-5;
         }
 
         .sender {
@@ -85,14 +85,24 @@
       .updateBtn {
         @apply bg-btn text-white font-bold hover:opacity-50 cursor-pointer;
       }
+      .spinner {
+        @apply bg-btn p-5 text-white flex justify-center items-center text-[20px];
+      }
       .updateLoader{
         @apply bg-btn font-bold hover:opacity-50 cursor-pointer p-4 flex justify-center items-center
       }
     }
   }
 
+  .displayMsg{
+    @apply hidden font-bold lg:flex lg:justify-center lg:items-center mt-[30%] text-gray-500 italic
+  }
+
  
 }
 .loader {
   @apply flex flex-col justify-center items-center mt-48;
+}
+.error{
+  @apply text-gray-500 text-[22px] italic p-10;
 }

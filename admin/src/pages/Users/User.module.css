@@ -159,3 +159,7 @@ table {
 .loader {
   @apply flex flex-col justify-center items-center mt-48;
 }
+
+.error{
+  @apply text-gray-500 text-[22px] italic p-10;
+}

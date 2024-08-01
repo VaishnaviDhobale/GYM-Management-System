@@ -43,10 +43,10 @@
       }
 
       .msgToAllContainer {
-        @apply p-10 shadow-lg absolute right-0 md:right-[250px] top-20 bg-gray-200 rounded-3xl rounded-tr-none w-full md:w-[400px];
+        @apply p-10 shadow-lg absolute right-[40px] lg:right-[180px] top-20 bg-gray-200 rounded-3xl rounded-tr-none w-[300px] lg:w-[400px];
 
         .msgToAllForm {
-          @apply p-0;
+          @apply w-full;
 
           select {
             @apply w-[100%] border mb-4 p-2 outline-none;
@@ -64,7 +64,7 @@
         }
 
         .cross {
-          @apply bg-red-600 font-bold text-[25px] text-white cursor-pointer inline-block relative bottom-8 left-[250px] md:left-[325px] rounded-full hover:bg-red-500;
+          @apply bg-red-600 font-bold text-[25px] text-white cursor-pointer inline-block relative bottom-8 left-[225px] lg:left-[325px] rounded-full hover:bg-red-500;
         }
       }
     }
@@ -148,4 +148,7 @@
 
 .loader {
   @apply flex flex-col justify-center items-center mt-48;
+}
+.error{
+  @apply text-gray-500 text-[22px] italic p-10;
 }

@@ -25,6 +25,12 @@
     .loginBtn {
       @apply p-2 text-center bg-btn hover:bg-[#3ab0e2] w-full cursor-pointer text-white font-bold;
     }
+    .spinner {
+      @apply bg-btn p-5 text-white flex justify-center items-center text-[20px];
+    }
   }
   
+}
+.error{
+  @apply text-gray-500 text-[22px] italic p-10;
 }

@@ -1,0 +1,60 @@
+
+.container{
+    @apply p-5;
+
+    .topDetails{
+        @apply p-0 sticky top-[95px] left-0;
+
+        .search{
+            @apply border outline-none px-5 py-4 text-[19px] w-[50%] shadow-sm rounded-md;
+        }
+    }
+
+    .tableDetails{
+        @apply p-0;
+
+        table {
+            @apply border-collapse w-[100%] mt-10;
+      
+            thead {
+              @apply bg-btn text-white font-bold;
+            }
+      
+            thead tr {
+              @apply p-5 border-b mb-5;
+            }
+            thead th {
+              @apply p-4;
+            }
+      
+            /* tbody  */
+      
+            tbody tr .del {
+              @apply bg-red-700 px-3 py-2 rounded-md hover:opacity-50;
+      
+              .delIcon {
+                @apply text-white text-[25px];
+              }
+            }
+      
+            tbody tr .action {
+              @apply flex gap-10 justify-center items-center;
+            }
+      
+            tbody td {
+              @apply p-[12px] relative;
+            }
+      
+            tbody {
+              @apply bg-gray-300 text-center;
+            }
+          }
+    }
+}
+
+.loader {
+  @apply flex flex-col justify-center items-center mt-48;
+}
+.error{
+  @apply text-gray-500 text-[22px] italic p-10;
+}

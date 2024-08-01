@@ -13,6 +13,7 @@ const initialState = {
   isLoading: false,
   deleteIsLoading :false,
   updateIsLoading : false,
+  postIsLoading :false,
   isError: false,
   messages: [],
 };
@@ -44,11 +45,19 @@ export const reducer = (state = initialState, { type, payload }) => {
     }
 
     case UPDATE_MESSAGE_SUCCESS : {
+      
       return {...state, updateIsLoading:false}
     }
 
     case REQUEST_FAILURE: {
-      return { ...state, isLoading: false, isError: true };
+      return {
+        ...state,
+        isLoading: false,
+        updateIsLoading: false,
+        postIsLoading: false,
+        deleteIsLoading: false,
+        isError: true,
+      };
     }
     default: {
       return {...state, isLoading : false};

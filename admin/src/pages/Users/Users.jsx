@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import styles from "./User.module.css";
 import { RiDeleteBin3Fill } from "react-icons/ri";
 import { ImBlocked } from "react-icons/im";
+import Cookies from "js-cookie";
 import {
   blockUsers,
   getBlockedUsers,
@@ -18,7 +19,7 @@ import ReactLoading from 'react-loading';
 
 
 export const Users = () => {
-  const [adminToken, setAdminToken] = useState(null);
+  const [adminData, setAdminData] = useState({});
   const [showUsers, setShowUsers] = useState(true);
   const [users, setUsers] = useState([]);
   const [blockedUsers, setBlockedUsers] = useState([]);
@@ -30,7 +31,7 @@ export const Users = () => {
   const handleGetUsers = async () => {
     const response = await dispatch(getAllUsers());
     if (response.status === 200) {
-      await setUsers(response.data);
+       setUsers(response.data);
     } else {
       console.log(response.error || "Not able to fech data.");
     }
@@ -40,7 +41,7 @@ export const Users = () => {
   const handleGetBlockedUsers = async () => {
     const response = await dispatch(getBlockedUsers());
     if (response.status === 200) {
-      await setBlockedUsers(response.data);
+       setBlockedUsers(response.data);
     } else {
       console.log(response.error || "Not able to fech data.");
     }
@@ -53,10 +54,10 @@ export const Users = () => {
     );
 
     if (confirm) {
-      const response = await dispatch(deleteUsers(id, adminToken));
+      const response = await dispatch(deleteUsers(id, adminData.adminToken));
 
       if (response.status === 200) {
-        await handleGetUsers();
+         handleGetUsers();
         toast.success(response.data.success);
       } else {
         toast.error(
@@ -72,7 +73,7 @@ export const Users = () => {
       `Are you sure you want to block ${user.name}'s account.`
     );
     if (confirm) {
-      const response = await dispatch(blockUsers(user));
+      const response = await dispatch(blockUsers(user,adminData.adminToken));
 
       if (response.status === 200) {
         await handleGetUsers();
@@ -84,13 +85,13 @@ export const Users = () => {
     }
   };
 
-  // Unblock members
+  // Unblock user
   const handleUnblock = async (user) => {
     const confirm = window.confirm(
       `Are you sure you want to unblock ${user.name} ${" "}(${user._id})`
     );
     if (confirm) {
-      const response = await dispatch(unblockUser(user));
+      const response = await dispatch(unblockUser(user,adminData.adminToken));
       if (response?.status === 200) {
         await handleGetBlockedUsers();
         toast.success(response?.data?.success);
@@ -102,7 +103,7 @@ export const Users = () => {
     }
   };
 
-  // Search member
+  // Search user
   const handleSearch = (event) => {
     event.preventDefault();
     const query = event.target.value;
@@ -132,7 +133,7 @@ export const Users = () => {
     const confirm = window.confirm(`Are you sure you want to delete all users`);
 
     if (confirm) {
-      const response = await dispatch(deleteAllUsers(adminToken));
+      const response = await dispatch(deleteAllUsers(adminData.adminToken));
 
       if (response.status === 200) {
         await handleGetUsers();
@@ -146,8 +147,10 @@ export const Users = () => {
   useEffect(() => {
     handleGetUsers();
     handleGetBlockedUsers();
-    const adminData = JSON.parse(localStorage.getItem("admin"));
-    setAdminToken(adminData.adminToken);
+    const admin = Cookies.get("admin");
+    if(admin){
+      setAdminData(JSON.parse(admin));
+    }
   }, []);
 
   if (userData.isLoading) {
@@ -156,7 +159,7 @@ export const Users = () => {
     <h3>Loading...</h3>
   </div>
   } else if (userData.isError) {
-    return <h1>There is an Error please referesh page</h1>;
+    return <h1 className= {styles.error}>An error occurred. Please refresh the page and try again.</h1>;
   }
  
   return (

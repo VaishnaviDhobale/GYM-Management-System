@@ -48,10 +48,10 @@ export const getAllUsers = () => async(dispatch) => {
     return response;
   } catch (error) {
     const status = error.response.status;
-    if (status === 500) {
+    if (status === 500 || status === 401) {
       dispatch(requestFailureAction());
     }
-    return { status, error: error.response.data.error.message };
+    return { status, error: error?.response?.data?.error };
   }
 };
 
@@ -70,11 +70,11 @@ export const deleteUsers = (id, adminToken) => async(dispatch) => {
     
         return response;
     }catch(error){
-        const status = error.response.status;
-        if (status === 500) {
-          dispatch(requestFailureAction());
-        }
-        return { status, error: error.response.data.error.message };
+      const status = error.response.status;
+      if (status === 500 || status === 401) {
+        dispatch(requestFailureAction());
+      }
+      return { status, error: error?.response?.data?.error };
     }
 }
 
@@ -93,10 +93,9 @@ export const deleteAllUsers = (adminToken) => async(dispatch) =>{
    return response
   }catch(error){
     const status = error.response.status;
-    if (status === 500) {
+    if (status === 500 || status === 401) {
       dispatch(requestFailureAction());
     }
-    console.log(error)
-    return { status, error: error?.response?.data?.error?.message };
+    return { status, error: error?.response?.data?.error };
   }
 }

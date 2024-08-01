@@ -6,21 +6,22 @@ import {
   getPackages,
   updatePackage,
 } from "../../Redux/packageReducer/Action";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import styles from "./Packages.module.css";
 import ReactLoading from "react-loading";
 import { FaCheck } from "react-icons/fa";
 import { RiDeleteBin2Fill } from "react-icons/ri";
-import { FcEditImage } from "react-icons/fc";
 import { BiSolidMessageSquareEdit } from "react-icons/bi";
 import { ImCross } from "react-icons/im";
+import Cookies from "js-cookie";
 
 export const Packages = () => {
   const [packages, setPackages] = useState([]);
   const [showAddForm, setShowAddForm] = useState(true);
-  const [showUpdateForm, setShowUpdateForm] = useState(true);
+  const [showUpdateForm, setShowUpdateForm] = useState(false);
   const [adminToken, setAdminToken] = useState(null);
+  
   const [adminId, setAdminId] = useState(null);
   const [Package, setPackage] = useState({
     name: "",
@@ -42,13 +43,10 @@ export const Packages = () => {
     description: "",
     features: [],
     discount: "",
-
-    // thumbnail: null,
   });
   const dispatch = useDispatch();
   const packageData = useSelector((state) => state.packagesDetails);
-
-  // console.log(packageData.postIsLoading);
+  const formContainerRef = useRef(null);
 
   // Get Packages
   const handleGetPackages = async () => {
@@ -78,7 +76,6 @@ export const Packages = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // console.log(Package);
     // Adding Package data into the formData;
     const formData = new FormData();
     for (const key in Package) {
@@ -90,7 +87,6 @@ export const Packages = () => {
     }
 
     try {
-      // await formData.append("createdBy", adminId);
       const response = await dispatch(
         addPackage(formData, adminId, adminToken)
       );
@@ -146,14 +142,13 @@ export const Packages = () => {
   // Handle update
   const handleUpdate = async (event) => {
     event.preventDefault();
-    // window.scrollTo({ top: 0, behavior: 'smooth' });
+    // console.log(updatedPackage.thumbnail.name,"check here")
 
     try {
-      // console.log(updatePackage,adminToken)
-      window.scrollTo({top : 0, behavior:'smooth'})
       const response = await dispatch(
         updatePackage(updatedPackage, adminToken)
       );
+
       if (response?.status === 200) {
         toast.success(response.data.success);
         await handleGetPackages();
@@ -178,132 +173,164 @@ export const Packages = () => {
     event.preventDefault();
     const query = event.target.value;
 
-    const filtered =  packageData.packages.filter((pack, index) => {
-          return (
-            pack._id.toLowerCase().includes(query.toLowerCase()) ||
-            pack.name.toLowerCase().includes(query.toLowerCase()) ||
-            pack.price.toLowerCase().includes(query.toLowerCase()) ||
-            pack.createdBy.email
-              .toLowerCase()
-              .includes(query.toLowerCase()) ||
-              pack.createdBy.contact.toLowerCase().includes(query.toLowerCase())
-          );
-        })
+    const filtered = packageData.packages.filter((pack, index) => {
+      return (
+        pack._id.toLowerCase().includes(query.toLowerCase()) ||
+        pack.name.toLowerCase().includes(query.toLowerCase()) ||
+        pack.price.toLowerCase().includes(query.toLowerCase()) ||
+        pack.createdBy.email.toLowerCase().includes(query.toLowerCase()) ||
+        pack.createdBy.contact.toLowerCase().includes(query.toLowerCase())
+      );
+    });
 
-        setPackages(filtered);
+    setPackages(filtered);
   };
 
   useEffect(() => {
     handleGetPackages();
-    const admin = JSON.parse(localStorage.getItem("admin"));
-    setAdminId(admin?.adminId || null);
-    setAdminToken(admin?.adminToken || null);
+    const adminId = Cookies.get("admin").adminId;
+    const adminToken = Cookies.get("admin").adminToken;
+    if(adminId){
+      setAdminId(JSON.parse(adminId));
+    }
+    if(adminToken){
+      setAdminToken(JSON.parse(adminToken));
+    }
   }, []);
+
+  if (packageData.isLoading) {
+    return (
+      <div className={styles.loader}>
+        <ReactLoading type="spin" color="#00BFFF" height={40} width={40} />
+        <h3>Loading...</h3>
+      </div>
+    );
+  } else if (packageData.isError) {
+    return <h1 className= {styles.error}>An error occurred. Please refresh the page and try again.</h1>;
+  }
 
   return (
     <>
       <div className={styles.container}>
         <div className={styles.packagesContainer}>
-         <div className={styles.topPackageButtonContainer}>
-         <div className={styles.search}>
-            <input
-              type="search"
-              placeholder="You can search package by package ID..."
-              onInput={handleSearch}
-            />
-          </div>
-          <div className={styles.packageTopButtons}>
-            {packages.length > 1 && (
-              <button onClick={handleDeleteAll} className={styles.deleteAll}>
-                Delete All
-              </button>
-            )}
-             {!showAddForm && (
-              <button
-                className={styles.openAddForm}
-                onClick={() => setShowAddForm(true)}
-              >
-                Add Package
-              </button>
-            )}
+          <div className={styles.topPackageButtonContainer}>
+            <div className={styles.search}>
+              <input
+                type="search"
+                placeholder="You can search package by package ID and Admin details..."
+                onInput={handleSearch}
+              />
             </div>
-         </div>
+            <div className={styles.packageTopButtons}>
+              {packages.length > 1 && (
+                <button onClick={handleDeleteAll} className={styles.deleteAll}>
+                  Delete All
+                </button>
+              )}
+              {!showAddForm && (
+                <button
+                  className={styles.openAddForm}
+                  onClick={() => {
+                    setShowAddForm(true);
+                    setShowUpdateForm(false);
+                    // formContainerRef.current.scrollIntoView({
+                    //   behavior: "smooth",
+                    // });
+                  }}
+                >
+                  Add Package
+                </button>
+              )}
+            </div>
+          </div>
           <div className={styles.packages}>
-            {packages.map((pack) => (
-              <div className={styles.package} key={pack.id}>
-                <div className={styles.image}>
-                  <img
-                    src={pack.thumbnail}
-                    alt={`${pack.name} img`}
-                    className={styles.img}
-                  />
-                </div>
-                <div className={styles.data}>
-                  <div className={styles.info}>
-                    <div className={styles.topData}>
-                      <h1 className={styles.infoName}> {pack.name}</h1>
-                      <p className={styles.duration}>
-                        {pack.durationInMonths} Months
+            {packages.length > 0 ? (
+              packages.map((pack, index) => (
+                <div className={styles.package} key={pack.id}>
+                  <div className={styles.image}>
+                    <img
+                      src={pack.thumbnail}
+                      alt={`${pack.name} img`}
+                      className={styles.img}
+                    />
+                  </div>
+                  <div className={styles.data}>
+                    <div className={styles.info}>
+                      <div className={styles.topData}>
+                        <h1 className={styles.infoName}> {pack.name}</h1>
+                        <p className={styles.duration}>
+                          {pack.durationInMonths} Months
+                        </p>
+                      </div>
+                      <p className={styles.infoDescription}>
+                        {pack.description}
                       </p>
+                      <div className={styles.infoPrices}>
+                        <p className={styles.price}>
+                          {" "}
+                          ₹{pack.originalPrice * (1 - pack.discount / 100)}
+                        </p>
+                        <p className={styles.originalPrice}>
+                          ₹ {pack.originalPrice}
+                        </p>
+                        <p className={styles.discount}>{pack.discount}%</p>
+                      </div>
+                      <div className={styles.features}>
+                        {pack.features.map((feature, index) => {
+                          return (
+                            <p className={styles.allFeatures} key={index}>
+                              <FaCheck className={styles.checkSign} />
+                              {feature}
+                            </p>
+                          );
+                        })}
+                      </div>
                     </div>
-                    <p className={styles.infoDescription}>{pack.description}</p>
-                    <div className={styles.infoPrices}>
-                      <p className={styles.price}>
-                        {" "}
-                        ₹{pack.originalPrice * (1 - pack.discount / 100)}
-                      </p>
-                      <p className={styles.originalPrice}>
-                        ₹ {pack.originalPrice}
-                      </p>
-                      <p className={styles.discount}>{pack.discount}%</p>
-                    </div>
-                    <div className={styles.features}>
-                      {pack.features.map((feature, index) => {
-                        return (
-                          <p className={styles.allFeatures}>
-                            <FaCheck className={styles.checkSign} />
-                            {feature}
-                          </p>
-                        );
-                      })}
+                    <div className={styles.buttons}>
+                      <button
+                        className={styles.packEdit}
+                        onClick={() => {
+                          setShowAddForm(false);
+                          setShowUpdateForm(true);
+                          setUpdatedPackage({
+                            _id: pack._id,
+                            name: pack.name,
+                            durationInMonths: pack.durationInMonths,
+                            price: pack.price,
+                            originalPrice: pack.originalPrice,
+                            description: pack.description,
+                            features: pack.features,
+                            discount: pack.discount,
+                            thumbnail: pack.thumbnail,
+                          });
+                        }}
+                      >
+                        <BiSolidMessageSquareEdit />
+                      </button>
+                      <button
+                        className={styles.packDelete}
+                        onClick={() => {
+                          handleDelete(pack._id);
+                        }}
+                      >
+                        <RiDeleteBin2Fill />
+                      </button>
                     </div>
                   </div>
-                  <div className={styles.buttons}>
-                    <button
-                      className={styles.packEdit}
-                      onClick={() => {
-                        setShowAddForm(false);
-                        setShowUpdateForm(true);
-                        setUpdatedPackage({
-                          _id: pack._id,
-                          name: pack.name,
-                          durationInMonths: pack.durationInMonths,
-                          price: pack.price,
-                          originalPrice: pack.originalPrice,
-                          description: pack.description,
-                          features: pack.features,
-                          discount: pack.discount,
-                          // thumbnail: null,
-                        });
-                      }}
-                    >
-                      <BiSolidMessageSquareEdit />
-                    </button>
-                    <button
-                      className={styles.packDelete}
-                      onClick={() => {
-                        handleDelete(pack._id);
-                      }}
-                    >
-                      <RiDeleteBin2Fill />
-                    </button>
-                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <h1>Kindly proceed with adding packages.</h1>
+            )}
           </div>
         </div>
-        <div className={styles.formContainer}>
+
+        {/* form container  */}
+        <div
+          className={styles.formContainer}
+          ref={formContainerRef}
+          id="formContainer"
+        >
           {showAddForm && (
             <div className={styles.addFormContainer}>
               <form
@@ -313,62 +340,71 @@ export const Packages = () => {
               >
                 <h1 className={styles.formHeading}>Add Package</h1>
                 <ImCross className={styles.addCross} onClick={handleCross} />
+                <label htmlFor="createdBy" className={styles.adminAddLable}>
+                  Admin
+                </label>
+                <input type="text" value={adminId} />
                 <input
                   type="text"
                   name="name"
                   placeholder="Name"
                   onChange={handleInput}
+                  required
                 />
                 <input
                   type="text"
                   name="durationInMonths"
                   placeholder="Duration In Months"
                   onChange={handleInput}
+                  required
                 />
                 <input
                   type="text"
                   name="price"
                   placeholder="Price"
                   onChange={handleInput}
+                  required
                 />
                 <input
                   type="text"
                   name="originalPrice"
                   placeholder="Original Price"
                   onChange={handleInput}
+                  required
                 />
                 <textarea
                   name="description"
                   placeholder="Description"
                   onChange={handleInput}
+                  required
                 ></textarea>
                 <input
                   type="text"
                   name="features"
                   placeholder="Features"
                   onChange={handleInput}
+                  required
                 />
                 <input
                   type="text"
                   name="discount"
                   placeholder="Discount"
                   onChange={handleInput}
+                  required
                 />
                 <input
                   type="file"
                   name="thumbnail"
                   placeholder="Thumbnail"
                   onChange={handleInput}
+                  required
                 />
-
                 <input
                   className={`${styles.submitBtn} ${
                     packageData.postIsLoading ? "hidden" : ""
                   }`}
-                  // className={styles.submitBtn}
                   type="submit"
                   value="Add Package"
-                  // disabled={packageData.postIsLoading}
                 />
                 {packageData.postIsLoading && (
                   <div className={styles.spinner}>
@@ -383,6 +419,9 @@ export const Packages = () => {
               </form>
             </div>
           )}
+
+          {/* Update form */}
+
           {!showAddForm && showUpdateForm && (
             <div className={styles.updateFormContainer}>
               <form
@@ -392,7 +431,10 @@ export const Packages = () => {
               >
                 <h1 className={styles.formHeading}>Update Package</h1>
                 <ImCross className={styles.addCross} onClick={handleCross} />
-                <input type="text" name="_id" value={updatedPackage._id} />
+                <label htmlFor="createdBy" className={styles.adminUpdateLable}>
+                  Created By
+                </label>
+                <input type="text" id="createdBy" value={adminId} />
                 <input
                   type="text"
                   placeholder="Name"
@@ -458,7 +500,17 @@ export const Packages = () => {
                   }}
                   value={updatedPackage.discount}
                 />
-                {/* <input type="file" placeholder="Thumbnail"/> */}
+                <input
+                  type="file"
+                  name="thumbnail"
+                  id=""
+                  onChange={(event) => {
+                    setUpdatedPackage({
+                      ...updatedPackage,
+                      thumbnail: event.target.files[0],
+                    });
+                  }}
+                />
                 <input
                   className={styles.submitBtn}
                   type="submit"

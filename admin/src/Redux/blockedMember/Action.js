@@ -34,47 +34,57 @@ export const requestFailureAction = (error) => {
 // Get blocked members
 export const getBlockedMembers = () => async(dispatch) => {
     try{
-        dispatch(requestStartAction());
+        // dispatch(requestStartAction());
         const response = await axios.get(`${baseUrl}/blockMembers/`);
-        dispatch(getBlockMemberSuccessAction(response));
+        // dispatch(getBlockMemberSuccessAction(response));
         return response
     }catch(error){
       const status = error.response.status;
-      if(status===500){
-        dispatch(requestFailureAction())
-      }
-      return { status, error: error.response.data.error.message };
+    if (status === 500 || status === 401) {
+      dispatch(requestFailureAction());
+    }
+    return { status, error: error?.response?.data?.error };
     }
 };
 
 // Block members 
-export const blockMembers = (payload) => async(dispatch) =>{
+export const blockMembers = (payload,adminToken) => async(dispatch) =>{
   try{  
     dispatch(requestStartAction());
-    const response = await axios.post(`${baseUrl}/blockMembers/block`, payload);
-    response.status===200 && dispatch(blockMemberSuccessAction());
-    return response
+    const response = await axios.post(`${baseUrl}/blockMembers/block`, payload,{
+      headers : {
+        "Content-Length" : "application/json",
+        adminToken
+      }
+    });
+    dispatch(blockMemberSuccessAction());
+    return response;
   }catch(error){
     const status = error.response.status;
-    if(status===500){
-      dispatch(requestFailureAction())
+    if (status === 500 || status === 401) {
+      dispatch(requestFailureAction());
     }
-    return { status, error: error.response.data.error.message };
+    return { status, error: error?.response?.data?.error };
   }
 }
 
 // Unblock members
-export const unblockMembers = (payload) => async(dispatch) => {
+export const unblockMembers = (payload,adminToken) => async(dispatch) => {
   try{
     dispatch(requestStartAction());
-    const response = await axios.post(`${baseUrl}/blockMembers/unblock`,payload);
-    response.status===200 && dispatch(unblockMemberSuccessAction());
+    const response = await axios.post(`${baseUrl}/blockMembers/unblock`,payload,{
+      headers : {
+        "Content-Type" : "application/json",
+        adminToken
+      }
+    });
+    dispatch(unblockMemberSuccessAction());
     return response;
   }catch(error){
     const status = error.response.status;
-    if(status===500){
+    if (status === 500 || status === 401) {
       dispatch(requestFailureAction());
     }
-    return { status, error: error.response.data.error.message };
+    return { status, error: error?.response?.data?.error };
   }
 }

@@ -4,32 +4,38 @@ import { useNavigate } from "react-router-dom";
 import { IoReorderThreeOutline } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import { HiOutlineLogout } from "react-icons/hi";
+import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { adminById } from "../../Redux/addAdminReducer/Action";
+import { toast } from "react-toastify";
 
 // import { RxCross1 } from "react-icons/rx";
 
 export const Navbar = () => {
   const [showResponsiveBox, setShowResponsiveBox] = useState(false);
-  const [adminData, setAdminData] = useState(null);
+  const [adminData, setAdminData] = useState({});
   const [showLogoutForm, setShowLogoutForm] = useState(false);
   const navigate = useNavigate();
 
   // Handle admin logout
   const handleLogout = async (event) => {
     event.preventDefault();
-    await setShowResponsiveBox(false);
-    let response = window.confirm("Do you want to proceed with logging out?");
+    setShowResponsiveBox(false);
+    const response = window.confirm("Do you want to proceed with logging out?");
+
     if (response) {
-      localStorage.setItem(
-        "admin",
-        JSON.stringify({ adminToken: null, email: null, adminId: null })
-      );
+      Cookies.remove("admin");
       setShowLogoutForm(false);
       navigate("/login");
+      window.location.reload();
     }
   };
 
   useEffect(() => {
-    setAdminData(JSON.parse(localStorage.getItem("admin")));
+    const admin = Cookies.get("admin");
+    if (admin) {
+      setAdminData(JSON.parse(admin));
+    }
   }, []);
 
   return (
@@ -52,16 +58,27 @@ export const Navbar = () => {
               Close
             </div>
             <div className={styles.subContainer1}>
-              <NavLink
+            <NavLink
+                to="/trainers"
                 className={({ isActive }) =>
                   `${styles.navlink} ${styles.navHover} ${
                     isActive && styles.active
                   }`
                 }
-                to={"/home"}
                 onClick={() => setShowResponsiveBox(false)}
               >
-                Home
+                Trainers
+              </NavLink>
+              <NavLink
+                to="/admins"
+                className={({ isActive }) =>
+                  `${styles.navlink} ${styles.navHover} ${
+                    isActive && styles.active
+                  }`
+                }
+                onClick={() => setShowResponsiveBox(false)}
+              >
+                Admins
               </NavLink>
               <NavLink
                 className={({ isActive }) =>
@@ -87,18 +104,30 @@ export const Navbar = () => {
                 Users
               </NavLink>
               <NavLink
-            to="/packages"
-            className={({ isActive }) =>
-              `${styles.navlink} ${styles.navHover} ${
-                isActive && styles.active
-              }`
-            }
-            onClick={() => setShowResponsiveBox(false)}
-          >
-            Packages
-          </NavLink>
+                to="/packages"
+                className={({ isActive }) =>
+                  `${styles.navlink} ${styles.navHover} ${
+                    isActive && styles.active
+                  }`
+                }
+                onClick={() => setShowResponsiveBox(false)}
+              >
+                Packages
+              </NavLink>
+
+              <NavLink
+                to="/supplementStore"
+                className={({ isActive }) =>
+                  `${styles.navlink} ${styles.navHover} ${
+                    isActive && styles.active
+                  }`
+                }
+                onClick={() => setShowResponsiveBox(false)}
+              >
+                Supplement Store
+              </NavLink>
             </div>
-            
+
             <div className={styles.subContainer2}>
               <NavLink
                 className={`${styles.logout} ${styles.navHover}`}
@@ -122,15 +151,25 @@ export const Navbar = () => {
 
       <div className={styles.navContainer}>
         <div className={styles.subContainer1}>
-          <NavLink
+        <NavLink
+            to="/trainers"
             className={({ isActive }) =>
               `${styles.navlink} ${styles.navHover} ${
                 isActive && styles.underline
               }`
             }
-            to={"/home"}
           >
-            Home
+            Trainers
+          </NavLink>
+          <NavLink
+            to="/admins"
+            className={({ isActive }) =>
+              `${styles.navlink} ${styles.navHover} ${
+                isActive && styles.underline
+              }`
+            }
+          >
+            Admins
           </NavLink>
           <NavLink
             className={({ isActive }) =>
@@ -163,6 +202,17 @@ export const Navbar = () => {
           >
             Packages
           </NavLink>
+          <NavLink
+            to="/supplementStore"
+            className={({ isActive }) =>
+              `${styles.navlink} ${styles.navHover} ${
+                isActive && styles.underline
+              }`
+            }
+          >
+            Supplement Store
+          </NavLink>
+          
         </div>
         <div className={styles.subContainer2}>
           <NavLink className={styles.addAdmin} to={"/signup"}>
@@ -176,7 +226,12 @@ export const Navbar = () => {
             }}
           >
             <p className={styles.profile}>
-              {adminData?.email?.charAt(0).toUpperCase()}
+              <img
+                className={styles.profileImg}
+                src={adminData.profileImg}
+                alt=""
+              />
+              {/* {adminData?.email?.charAt(0).toUpperCase()} */}
             </p>
           </NavLink>
 

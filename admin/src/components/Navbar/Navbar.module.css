@@ -43,12 +43,16 @@
         @apply ml-5;
 
         .profile{
-          @apply bg-green-900 text-white font-bold h-[50px] w-[50px] rounded-full flex justify-center items-center ;
+          @apply h-[55px] w-[55px] rounded-full flex justify-center items-center ;
+
+          .profileImg{
+            @apply rounded-full w-full h-full
+          }
         }
       }
 
       .profileBox{
-        @apply absolute top-[120px] shadow-md p-4 rounded-md cursor-pointer flex justify-center items-center gap-6 bg-white;
+        @apply absolute top-[120px] shadow-md p-4 rounded-md cursor-pointer flex justify-center items-center gap-6 bg-white z-30 ;
 
         .profileLogout{
           @apply text-red-500 text-[30px] hover:opacity-25

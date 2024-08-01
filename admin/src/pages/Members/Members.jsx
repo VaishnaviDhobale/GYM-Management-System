@@ -11,6 +11,7 @@ import { addMessages } from "../../Redux/messageReducer/Action";
 import { MemberList } from "../../components/MemberList/MemberList";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import ReactLoading from "react-loading";
+import Cookies from "js-cookie";
 
 import {
   blockMembers,
@@ -22,18 +23,20 @@ import { Link } from "react-router-dom";
 
 export const Members = () => {
   const [members, setMembers] = useState([]);
-  const [adminId, setAdminId] = useState(null);
+  // const [adminId, setAdminId] = useState(null);
   const [showMsgToAllForm, setShowMsgToAllForm] = useState(false);
   const [showBlockedMember, setShowBlockedMember] = useState(false);
   const [showMembers, setShowMembers] = useState(true);
   const [blockMembersList, setBlockedMembersList] = useState([]);
-  const [adminToken, setAdminToken] = useState(null);
+  // const [adminToken, setAdminToken] = useState(null);
   const [openThreeDots, setOpenThreeDots] = useState(false);
+  const [adminData, setAdminData] = useState({});
+  // console.log(adminData)
 
   const [publicMsg, setPublicMsg] = useState({
     message: "",
     type: "",
-    sender: adminId,
+    sender: adminData.adminId,
     msgType: "Public",
   });
 
@@ -43,12 +46,14 @@ export const Members = () => {
 
   // Get member
   const handleGetMembers = async () => {
-    const response = await dispatch(getMembers());
+    // console.log(adminToken);
+    const response = await dispatch(getMembers(adminData?.adminToken));
     if (response.status === 200) {
-      await setMembers(response.data);
+      // console.log(response.data)
+      await setMembers(response?.data);
     } else {
       console.log(
-        response?.error || "Something went wrong while getting blocked member."
+        response?.error || "Something went wrong while getting members."
       );
     }
   };
@@ -59,6 +64,9 @@ export const Members = () => {
       const response = await dispatch(getBlockedMembers());
       if (response.status === 200) {
         await setBlockedMembersList(response.data);
+        if (response.data.length < 1 && showBlockedMember) {
+          window.location.reload();
+        }
       } else {
         console.log(
           response?.error ||
@@ -104,7 +112,10 @@ export const Members = () => {
   // Send msg to all
   const handleSendMsgToAll = async (event) => {
     event.preventDefault();
-    const response = await dispatch(addMessages(publicMsg));
+    const updatedPublicMsg = { ...publicMsg, sender: adminData.adminId };
+    const response = await dispatch(
+      addMessages(updatedPublicMsg, adminData.adminToken)
+    );
     if (response.status === 200) {
       setShowMsgToAllForm(false);
       toast.success(response?.data?.success);
@@ -121,7 +132,7 @@ export const Members = () => {
       "Are you sure you want to delete this member"
     );
     if (confirm) {
-      const response = await dispatch(deleteMembers(id));
+      const response = await dispatch(deleteMembers(id, adminData.adminToken));
       if (response.status === 200) {
         handleGetMembers();
         toast.success(response?.data?.success);
@@ -140,7 +151,7 @@ export const Members = () => {
     );
     if (confirm) {
       // console.log(memberWithToken)
-      const response = await dispatch(blockMembers(member));
+      const response = await dispatch(blockMembers(member,adminData.adminToken));
       if (response.status === 200) {
         await handleGetMembers();
         await handleGetBlockedMembers();
@@ -161,7 +172,7 @@ export const Members = () => {
       })`
     );
     if (confirm) {
-      const response = await dispatch(unblockMembers(member));
+      const response = await dispatch(unblockMembers(member,adminData.adminToken));
       if (response?.status === 200) {
         await handleGetBlockedMembers();
         toast.success(response?.data?.success);
@@ -180,7 +191,7 @@ export const Members = () => {
     );
 
     if (confirm) {
-      const response = await dispatch(deleteAllMembers(adminToken));
+      const response = await dispatch(deleteAllMembers(adminData.adminToken));
 
       if (response.status === 200) {
         await handleGetMembers();
@@ -194,18 +205,13 @@ export const Members = () => {
   useEffect(() => {
     handleGetMembers();
     handleGetBlockedMembers();
-    const adminData = JSON.parse(localStorage.getItem("admin"));
-    setAdminToken(adminData.adminToken);
+    const adminData = Cookies.get("admin");
     if (adminData) {
-      setAdminId(adminData.adminId);
-      setPublicMsg((prevMsg) => ({
-        ...prevMsg,
-        sender: adminData.adminId,
-      }));
+      setAdminData(JSON.parse(adminData));
     }
   }, []);
 
-  console.log(memberData);
+  // console.log(memberData);
   if (memberData.isLoading) {
     return (
       <div className={styles.loader}>
@@ -214,7 +220,7 @@ export const Members = () => {
       </div>
     );
   } else if (memberData.isError) {
-    return <h1>There is an Error please referesh page</h1>;
+    return <h1 className= {styles.error}>An error occurred. Please refresh the page and try again.</h1>;
   }
 
   // console.log(memberData);
@@ -283,19 +289,6 @@ export const Members = () => {
                         </select>{" "}
                         <br />
                         <input
-                          type="text"
-                          placeholder="Sender"
-                          name="sender"
-                          onChange={(e) => {
-                            setPublicMsg({
-                              ...publicMsg,
-                              sender: e.target.value,
-                            });
-                          }}
-                          value={publicMsg.sender}
-                        />{" "}
-                        <br />
-                        <input
                           type="submit"
                           value="Send"
                           className={styles.sendAllMsgBtn}
@@ -307,7 +300,7 @@ export const Members = () => {
                     <button
                       className={styles.detailsBtns}
                       onClick={() => {
-                        setShowMsgToAllForm(true);
+                        setShowMsgToAllForm(!showMsgToAllForm);
                       }}
                     >
                       Msg All
@@ -348,15 +341,14 @@ export const Members = () => {
                       onClick={handleDeleteAllUsers}
                     >
                       {memberData.deleteAllIsLoading ? (
-                        
-                       <h1>
-                         <ReactLoading
-                          type="spin"
-                          color="white"
-                          height={20}
-                          width={20}
-                        /> 
-                       </h1>
+                        <h1>
+                          <ReactLoading
+                            type="spin"
+                            color="white"
+                            height={20}
+                            width={20}
+                          />
+                        </h1>
                       ) : (
                         "Delete All"
                       )}

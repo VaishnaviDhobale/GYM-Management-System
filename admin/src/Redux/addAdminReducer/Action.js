@@ -7,9 +7,9 @@ import {
   POST_ADMIN_SUCCESS,
 } from "./ActionType";
 import { baseUrl } from "../../comman";
+import { getRequestStartAction } from "../packageReducer/Action";
 
 // admin action methods
-
 export const requestStartAction = () => {
   return { type: REQUEST_START };
 };
@@ -31,28 +31,57 @@ export const requestFailureAction = (error) => {
 };
 
 // Get admins
-export const getAdmins = () => async (dispatch) => {
+export const getAdmins = (adminToken) => async (dispatch) => {
+  console.log(adminToken);
   try {
     dispatch(requestStartAction());
-    const admins = await axios.get(`${baseUrl}/admin/`,{ headers : {
-        "Content-Type" : "application/json"
-    }});
+    const admins = await axios.get(`${baseUrl}/admin/`);
     dispatch(getAdminSuccessAction(admins));
+    console.log(admins);
+    return admins;
   } catch (error) {
-    dispatch(requestFailureAction(error));
+    const status = error.response.status;
+    if (status === 500 || status === 401) {
+      dispatch(requestFailureAction());
+    }
+    return { status, error: error?.response?.data?.error };
   }
 };
 
-// Add admin 
-export const addAdmin = (admin)=> async(dispatch)=>{
-    try{
-        dispatch(requestStartAction());
-        const addMember = await axios.post(`${baseUrl}/admin/addAdmin`,admin,{headers : {
-            "Content-Type" : "application/json"
-        }});
-        dispatch(postAdminSuccessAction(addMember));
-        return addMember
-    }catch(error){
-        dispatch(requestFailureAction(error))
+// Get admin by id
+export const adminById = (id) => async (dispatch) => {
+  console.log(id);
+  try {
+    dispatch(getRequestStartAction());
+    const response = await axios.get(`${baseUrl}/admin/adminById/${id}`);
+    dispatch(getAdminSuccessAction(response.data));
+    return response;
+  } catch (error) {
+    const status = error.response.status;
+    if (status === 500 || status === 401) {
+      dispatch(requestFailureAction());
     }
-}
+    return { status, error: error?.response?.data?.error };
+  }
+};
+
+// Add admin
+export const addAdmin = (admin, adminToken) => async (dispatch) => {
+  try {
+    dispatch(requestStartAction());
+    const addMember = await axios.post(`${baseUrl}/admin/addAdmin`, admin, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        adminToken 
+      },
+    });
+    dispatch(postAdminSuccessAction(addMember));
+    return addMember;
+  } catch (error) {
+    const status = error.response.status;
+    if (status === 500 || status === 401) {
+      dispatch(requestFailureAction());
+    }
+    return { status, error: error?.response?.data?.error};
+  }
+};

@@ -7,7 +7,7 @@ import {
   DELETE_MESSAGE_SUCCESS,
   UPDATE_MESSAGE_SUCCESS,
   DELETE_REQUEST_START,
-  UPDATE_REQUEST_START
+  UPDATE_REQUEST_START,
 } from "./ActionTypes";
 import { baseUrl } from "../../comman";
 
@@ -16,12 +16,12 @@ export const getRequestStartAction = () => {
 };
 
 export const deleteRequestStartAction = () => {
-  return {type : DELETE_REQUEST_START}
-}
+  return { type: DELETE_REQUEST_START };
+};
 
 export const updateRequestStartAction = () => {
-  return {type : UPDATE_REQUEST_START}
-}
+  return { type: UPDATE_REQUEST_START };
+};
 
 export const getMessagesSuccessAction = (payload) => {
   return { type: GET_MESSAGE_SUCCESS, payload };
@@ -43,8 +43,6 @@ export const requestFailureAction = (error) => {
   return { type: REQUEST_FAILURE, error };
 };
 
-
-
 // Get msg's
 export const getMessages = () => async (dispatch) => {
   try {
@@ -54,59 +52,79 @@ export const getMessages = () => async (dispatch) => {
 
     return response;
   } catch (error) {
-    const status = error?.response?.status;
-    if (status === 500) {
+    const status = error.response.status;
+    if (status === 500 || status === 401) {
       dispatch(requestFailureAction());
     }
-    return { status, error: error.response.data.error.message };
+    return { status, error: error?.response?.data?.error };
   }
 };
 
 // Send msg
-export const addMessages = (payload) => async (dispatch) => {
+export const addMessages = (payload, adminToken) => async (dispatch) => {
   try {
-    const response = await axios.post(`${baseUrl}/msg/sendMsg`, payload);
+    const response = await axios.post(`${baseUrl}/msg/sendMsg`, payload, {
+      headers: {
+        "Content-Type": "application/json",
+        adminToken,
+      },
+    });
     dispatch(postMessageSuccessAction(response));
     return response;
   } catch (error) {
     const status = error.response.status;
-    if (status === 500) {
+    if (status === 500 || status === 401) {
       dispatch(requestFailureAction());
     }
-    return { status, error: error.response.data.error.message };
+    return { status, error: error?.response?.data?.error };
   }
 };
 
 // Delete msg
-export const deleteMessages = (payload) => async (dispatch) => {
+export const deleteMessages = (payload, adminToken) => async (dispatch) => {
   try {
     dispatch(deleteRequestStartAction());
-    const response = await axios.delete(`${baseUrl}/msg/deleteMsg/${payload}`);
+    const response = await axios.delete(`${baseUrl}/msg/deleteMsg/${payload}`, {
+      headers: {
+        "Content-Type": "application/json",
+        adminToken,
+      },
+    });
     dispatch(deleteMessageSuccessAction());
 
     return response;
   } catch (error) {
     const status = error.response.status;
-    if (status === 500) {
+    if (status === 500 || status === 401) {
       dispatch(requestFailureAction());
     }
-    return { status, error: error.response.data.error.message };
+    return { status, error: error?.response?.data?.error };
   }
 };
 
-// Update msg 
-export const updateMessages = (payload) => async (dispatch) => {
+// Update msg
+export const updateMessages = (payload, adminToken) => async (dispatch) => {
+  console.log(payload);
   try {
     dispatch(updateRequestStartAction());
-    const response = await axios.patch(`${baseUrl}/msg/updateMsg/${payload._id}`,payload);
+    const response = await axios.patch(
+      `${baseUrl}/msg/updateMsg/${payload._id}`,
+      payload,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          adminToken,
+        },
+      }
+    );
     dispatch(updateMessageSuccessAction());
 
     return response;
   } catch (error) {
     const status = error.response.status;
-    if (status === 500) {
+    if (status === 500 || status === 401) {
       dispatch(requestFailureAction());
     }
-    return { status, error: error.response.data.error.message };
+    return { status, error: error?.response?.data?.error };
   }
 };

@@ -1,0 +1,131 @@
+.container {
+  @apply p-5 lg:grid lg:grid-cols-5 gap-10;
+
+  .dataContainer {
+    @apply col-span-3 shadow-md p-6;
+
+    .searchDiv {
+      @apply sticky top-[58px] lg:shadow-none lg:top-[96px] flex gap-10;
+
+      .search {
+        @apply border p-5 text-[20px] outline-none w-full col-span-2 shadow-md ;
+      }
+
+      .addTrainersBtn {
+        @apply bg-btn text-white font-bold w-auto px-4 py-4  hover:opacity-50;
+      }
+    }
+
+    .trainerData {
+      @apply lg:grid lg:grid-cols-2 gap-10 mt-10 max-h-screen overflow-y-auto pr-5;
+
+      .tariner {
+        @apply border rounded-2xl;
+
+        .imgDiv {
+          @apply p-0 h-[300px];
+
+          .img {
+            @apply rounded-t-2xl w-full object-cover h-full;
+          }
+        }
+
+        .data {
+          @apply p-4;
+
+          .nameAge {
+            @apply text-[25px] font-bold my-2;
+
+            .nameSpan {
+              @apply text-green-600 underline;
+            }
+          }
+          .experience {
+            @apply text-orange-600 font-bold text-[20px] my-2;
+          }
+
+          .specialty {
+            @apply font-bold text-[20px] my-2;
+          }
+        }
+
+        .btns {
+          @apply p-4 flex justify-between;
+
+          .updateBtn {
+            @apply bg-btn text-white text-[30px] p-2 rounded-md hover:opacity-50;
+          }
+          .deleteBtn {
+            @apply bg-red-700 text-white text-[30px] p-2 rounded-md hover:opacity-50;
+          }
+        }
+      }
+    }
+  }
+
+  .formContainer {
+    @apply col-span-2 shadow-md p-6 mt-10 lg:mt-0;
+
+    .addFormContainer {
+      @apply absolute top-24 left-0 lg:static bg-slate-50 p-4;
+
+      .addHeading {
+        @apply text-[30px] font-bold mb-5 flex justify-center;
+      }
+
+      .addForm {
+        @apply p-0 relative;
+
+        .addTrainerBtn {
+          @apply bg-btn text-white font-bold text-[20px] cursor-pointer hover:opacity-50;
+        }
+
+        .addCross {
+          @apply lg:hidden bg-red-600 text-white text-[30px] font-bold rounded-full p-1 cursor-pointer hover:opacity-50 absolute top-[-70px] right-[-5px];
+        }
+
+        .spinner {
+            @apply bg-btn p-5 text-white flex justify-center items-center text-[20px];
+          }
+      }
+
+      .addForm input {
+        @apply w-full border p-3 mb-4 outline-none;
+      }
+    }
+
+    .updateFormContainer {
+      @apply absolute lg:static top-24 left-0 bg-slate-50 p-5;
+
+      .addHeading {
+        @apply text-[30px] font-bold mb-5 flex justify-center;
+      }
+
+      .updateForm {
+        @apply p-0 relative;
+
+        .updateCross {
+          @apply lg:hidden bg-red-600 text-white text-[30px] font-bold rounded-full p-1 cursor-pointer hover:opacity-50 absolute top-[-70px] right-[-5px];
+        }
+
+        .spinner {
+          @apply bg-btn p-5 text-white flex justify-center items-center text-[20px];
+        }
+
+        .updateTrainerBtn {
+          @apply bg-btn text-white font-bold text-[20px] cursor-pointer hover:opacity-50;
+        }
+      }
+
+      .updateForm input {
+        @apply w-full border p-3 mb-4 outline-none;
+      }
+    }
+  }
+}
+.loader {
+    @apply flex flex-col justify-center items-center mt-48;
+  }
+  .error{
+    @apply text-gray-500 text-[22px] italic p-10;
+  }

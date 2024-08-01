@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { addAdmin } from "../../Redux/addAdminReducer/Action";
 
@@ -14,52 +14,56 @@ import "react-toastify/dist/ReactToastify.css";
 import styles from "./SignUp.module.css";
 import axios from "axios";
 import { baseUrl } from "../../comman";
+import Cookies from "js-cookie";
+import ReactLoading from "react-loading";
 
 // Sign Up page start
 export const SignUp = () => {
   const [admin, setAdmin] = useState({});
   const [viewPassword, setViewPassword] = useState(false);
   const [viewConfirmPassword, setConfirmViewPassword] = useState(false);
+  const [adminData, setAdminData] = useState({});
+  const [isPostLoading, setIsPostLoading] = useState(false);
   const formRef = useRef(); // for clear from after submited
-  const adminToken = JSON.parse(localStorage.getItem("admin")).adminToken;
   const dispatch = useDispatch();
 
- 
   // Handle Form input
   const handleInput = (event) => {
-    const { name, value } = event.target;
+    const { name, value, files } = event.target;
     event.preventDefault();
-    setAdmin({
-      ...admin,
-      [name]: value,
-    });
+    if (name === "profileImg") {
+      setAdmin({ ...admin, [name]: files[0] });
+    } else {
+      setAdmin({ ...admin, [name]: value });
+    }
   };
 
-  // Check admin alredy exist 
-  const isAdminAlredyExist = async()=>{
-    try{
+  // Check admin alredy exist
+  const isAdminAlredyExist = async () => {
+    try {
       const adminExists = await axios.get(
         `${baseUrl}/admin/adminByEmail/${admin?.email}`,
         {
           headers: {
             "Content-Type": "application/json",
-            adminToken,
+            adminToken: adminData.adminToken,
           },
         }
       );
-      return adminExists
-    }catch(error){
-      return error
+      return adminExists;
+    } catch (error) {
+      toast.error(error?.response?.data?.error);
+      return error;
     }
-  }
+  };
 
   // Clear form
   const handleReset = () => {
     formRef.current.reset();
   };
 
-   // Handle form submit
-   const handleSubmit = async (event) => {
+  // Handle form submit
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     // Admin details validation start
@@ -73,22 +77,43 @@ export const SignUp = () => {
       toast.error("Password length should be greater than 8 characters.");
       // Admin details validation ends
     } else {
-      const adminExists = await isAdminAlredyExist()
+      const adminExists = await isAdminAlredyExist();
 
       if (adminExists.data) {
         toast.error("An admin with the provided email already exists.");
       } else {
+        // Adding Package data into the formData;
+        const formData = new FormData();
+        for (const key in admin) {
+          if (Array.isArray(admin[key])) {
+            admin[key].forEach((item) => formData.append(`${key}[]`, item));
+          } else {
+            formData.append(key, admin[key]);
+          }
+        }
 
-        const response = await dispatch(addAdmin(admin));
-        if(response.status === 200){
+        setIsPostLoading(true);
+        const response = await dispatch(
+          addAdmin(formData, adminData.adminToken)
+        );
+        if (response?.status === 200) {
           toast.success(response?.data?.success);
           handleReset();
-        }else{
-          toast.error("Something went wrong while adding admin.");
+          setIsPostLoading(false);
+        } else {
+          setIsPostLoading(false);
+          toast.error(response.error || `Unable to add new `);
         }
       }
     }
   };
+
+  useEffect(() => {
+    const admin = Cookies.get("admin");
+    if (admin) {
+      setAdminData(JSON.parse(admin));
+    }
+  }, []);
 
   return (
     <>
@@ -174,7 +199,28 @@ export const SignUp = () => {
             className={styles.inputs}
             required
           />
-          <input type="submit" className={styles.signUpBtn} value={"Sign Up"} />
+          <label htmlFor="profileImg">Profile Image.</label>
+          <br />
+          <input
+            type="file"
+            name="profileImg"
+            id="profileImg"
+            className={styles.inputs}
+            onChange={handleInput}
+            required
+          />
+          <input
+            type="submit"
+            className={`${styles.signUpBtn} ${
+              isPostLoading ? "hidden" : ""
+            }`}
+            value={"Sign Up"}
+          />
+          {isPostLoading && (
+            <div className={styles.spinner}>
+              <ReactLoading type="spin" color="white" height={20} width={20} />
+            </div>
+          )}
         </form>
         <p className={styles.alreadyAccount}>
           Already have account?{" "}
