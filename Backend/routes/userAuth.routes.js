@@ -18,7 +18,7 @@ const userRouter = express.Router(); // Create route for user auth
 userRouter.route("/addUser").post(addUser); //  registration
 userRouter.route("/login").post(loginUser); //  login
 userRouter.route("/").get(allUserData); //  All users
-userRouter.route("/updateUser/:id").put(updateUser); //  update user details
+userRouter.route("/updateUser/:id").patch(updateUser); //  update user details
 userRouter.route("/userByEmail/:email").get(userByEmail); //  find user by email
 userRouter.route("/deleteUser/:id").delete(adminAuth, deleteUser); //  delete user
 userRouter.route("/deleteAllUsers").delete(adminAuth, deleteAllUsers); //  delete user

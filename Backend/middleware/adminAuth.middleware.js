@@ -9,17 +9,28 @@ const adminAuth = (req, res, next) => {
         if (decoded) {
           next();
         } else {
-          res.status(401).send({ error: `Access denied. Invalid authentication. ${err.message}` });
+          res
+            .status(401)
+            .send({
+              error: `Access denied. Invalid authentication.`,
+              details: err.message,
+            });
         }
       });
     } else {
       res.status(401).send({ error: "Please log in to perform this action." });
     }
   } catch (error) {
-    res.status(500).send({ error: "An error occurred while processing the request. Please try again later.", details: error.message });
+    res
+      .status(500)
+      .send({
+        error:
+          "An error occurred while processing the request. Please try again later.",
+        details: error.message,
+      });
   }
 };
 
 module.exports = {
-  adminAuth
+  adminAuth,
 };

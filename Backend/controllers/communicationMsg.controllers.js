@@ -22,7 +22,7 @@ const getMsgs = async (req, res) => {
   try {
     const msg = await MsgModel.find().populate("sender");
     // console.log('Populated Messages:', msg); // Debugging log
-
+    console.log(msg)
     if (msg.length > 0) {
       return res.status(200).send(msg);
     } else {
