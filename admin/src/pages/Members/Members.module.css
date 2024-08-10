@@ -1,0 +1,154 @@
+.container {
+  @apply p-0 ml-4 mt-5;
+
+  /* Details container  */
+  .detailsContainer {
+    @apply md:flex md:justify-between items-center mt-10 sticky top-[50px] md:top-[74px] bg-white z-30 pb-4 md:pb-0 pr-6;
+
+    .leftDetails {
+      @apply flex gap-3 items-center justify-between;
+
+      .search {
+        @apply border border-b outline-none px-3 py-4 rounded-md w-full lg:w-96 text-[18px];
+      }
+
+      .allMembers {
+        @apply hidden bg-gray-300 md:flex justify-center items-center font-bold w-[40px] h-[50px] rounded-md;
+      }
+    }
+
+    .rightDetails {
+      @apply flex justify-between items-center;
+
+      .threeDotsContainer {
+        @apply bg-btn text-white p-3 rounded-full mr-3 cursor-pointer hover:opacity-50 absolute top-[-80px] right-0 md:relative md:top-0;
+
+        .threeDots {
+          @apply text-[30px] flex justify-center items-center;
+        }
+      }
+
+      .openOnThreeDotsOptions {
+        @apply absolute top-[-20px] md:top-16 right-4 flex flex-col gap-5 bg-white p-5 shadow-md border w-[170px];
+
+        .detailsBtns {
+          @apply bg-btn text-white rounded-md px-3 py-4 w-full hover:opacity-50;
+        }
+        .deleteAll {
+          @apply bg-red-700 text-white px-3 py-4 rounded-md hover:opacity-50 w-full;
+        }
+        .messages {
+          @apply bg-btn text-white px-3 py-4 rounded-md cursor-pointer hover:opacity-50 ml-3;
+        }
+      }
+
+      .msgToAllContainer {
+        @apply p-10 shadow-lg absolute right-[40px] lg:right-[180px] top-20 bg-gray-200 rounded-3xl rounded-tr-none w-[300px] lg:w-[400px];
+
+        .msgToAllForm {
+          @apply w-full;
+
+          select {
+            @apply w-[100%] border mb-4 p-2 outline-none;
+          }
+          input {
+            @apply border outline-none mb-4 w-[100%] px-4 py-2;
+          }
+
+          textarea {
+            @apply mb-3 border outline-none w-[100%] px-4 py-2;
+          }
+          .sendAllMsgBtn {
+            @apply bg-btn text-white font-bold px-3 py-3 cursor-pointer hover:bg-btnHover;
+          }
+        }
+
+        .cross {
+          @apply bg-red-600 font-bold text-[25px] text-white cursor-pointer inline-block relative bottom-8 left-[225px] lg:left-[325px] rounded-full hover:bg-red-500;
+        }
+      }
+    }
+  }
+
+  /* Note for Id  */
+  .note {
+    @apply hidden lg:block mt-5 text-green-500 font-bold sticky top-[160px];
+  }
+
+  /*  Table  */
+  .tableContainer {
+    @apply p-0;
+    table {
+      @apply border-collapse w-[100%] mt-10;
+
+      thead {
+        @apply bg-btn text-white font-bold;
+      }
+
+      thead tr {
+        @apply p-5 border-b mb-5;
+      }
+      thead th {
+        @apply p-4;
+      }
+
+      /* tbody  */
+      .sendBtn {
+        @apply bg-btn px-3 py-1 text-white rounded-md hover:bg-btnHover;
+
+        .sendBtnIcon {
+          @apply flex justify-center items-center;
+        }
+      }
+
+      tbody tr .del {
+        @apply bg-red-700 px-3 py-1 rounded-md hover:bg-red-600;
+
+        .delIcon {
+          @apply text-white;
+        }
+      }
+
+      tbody tr .edit {
+        @apply bg-btn px-3 py-1 rounded-md hover:bg-btnHover;
+
+        .editIcon {
+          @apply text-white;
+        }
+      }
+
+      tbody tr .action {
+        @apply flex justify-evenly;
+      }
+
+      tbody th {
+        @apply p-[12px];
+      }
+      .rightDetails tbody {
+        @apply bg-slate-100;
+
+        .memberId {
+          @apply text-left;
+        }
+      }
+    }
+  }
+}
+
+.noDataContainer {
+  @apply p-0;
+
+  .noDataDetails {
+    @apply flex flex-col justify-center items-center text-[30px] font-bold mt-20;
+    .blockListBtn {
+      @apply bg-btn text-white px-3 py-4 rounded-md cursor-pointer hover:opacity-50 text-[25px] mt-8;
+    }
+  }
+}
+
+.loader {
+  @apply flex flex-col justify-center items-center mt-48;
+}
+.error{
+  @apply text-gray-500 text-[22px] italic p-10;
+}

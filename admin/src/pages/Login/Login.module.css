@@ -1,0 +1,36 @@
+.container {
+  @apply h-screen flex flex-col items-center justify-center;
+
+  .heading {
+    @apply text-xl font-bold mb-[-20px];
+  }
+  .noAccount {
+    @apply text-sm;
+
+    .noAccountSpan{
+        @apply text-[#0284c7] cursor-pointer
+    }
+  }
+  
+  .form {
+    @apply p-6 shadow-xl max-sm:w-full lg:w-[35%] m-6 relative;
+  
+    .inputs {
+      @apply p-[10px] w-full outline-none border border-solid mb-4 text-sm;
+    }
+    .forPassword {
+      @apply absolute right-[35px] top-[95px] cursor-pointer;
+    }
+  
+    .loginBtn {
+      @apply p-2 text-center bg-btn hover:bg-[#3ab0e2] w-full cursor-pointer text-white font-bold;
+    }
+    .spinner {
+      @apply bg-btn p-5 text-white flex justify-center items-center text-[20px];
+    }
+  }
+  
+}
+.error{
+  @apply text-gray-500 text-[22px] italic p-10;
+}

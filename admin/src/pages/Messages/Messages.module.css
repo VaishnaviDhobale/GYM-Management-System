@@ -1,0 +1,108 @@
+.container {
+  @apply p-0 mt-16 gap-0 lg:grid lg:grid-cols-2 lg:gap-20 h-screen relative text-[20px];
+
+  .msgDesign {
+    @apply col-span-1 overflow-y-auto max-h-[100%] mt-24;
+
+      /* Hide the scrollbar */
+      scrollbar-width: none; 
+      -ms-overflow-style: none; 
+
+    .msgDesignSubContainer {
+      @apply mb-10 text-[20px] relative p-4 mx-4 border rounded-md;
+
+      .buttonsContainer {
+        @apply p-0;
+
+        .types {
+          @apply p-0;
+
+          .general {
+            @apply bg-green-800 inline-block px-2 py-1 text-white rounded-md absolute top-2 right-2 text-[15px] w-[75px] text-center;
+          }
+
+          .alert {
+            @apply bg-red-700 inline-block px-2 py-1 text-white  rounded-md absolute top-2 right-2 text-[15px] w-[75px] text-center;
+          }
+        }
+      }
+
+      .infoContainer {
+        @apply p-0;
+
+        .bold {
+          @apply font-bold;
+        }
+
+        .msg {
+          @apply my-5;
+        }
+
+        .sender {
+          @apply my-8;
+        }
+
+        .btns {
+          @apply p-0;
+
+          .del {
+            @apply bg-red-700 px-[12px] py-1 text-white rounded-md cursor-pointer hover:opacity-50 mr-8;
+          }
+
+          .edit {
+            @apply bg-btn px-[12px] py-1 text-white rounded-md cursor-pointer hover:opacity-50 mr-8;
+          }
+        }
+      }
+    }
+  }
+
+  .editMsgFormDetails{
+
+    @apply p-0;
+
+    .search input{
+      @apply outline-none px-4 py-2 absolute top-[-60px] lg:top-0 lg:left-0 ml-4 rounded-md w-[94%] lg:w-[45.5%] border text-[20px];
+    }
+
+    .editMsgForm {
+      @apply absolute top-2 w-full lg:col-span-1 lg:relative justify-center md:flex;
+  
+      .cross {
+        @apply bg-red-700 text-white font-bold inline-block p-1 rounded-full text-[20px] absolute right-6 md:right-32 top-4 hover:opacity-50 cursor-pointer;
+      }
+  
+      form {
+        @apply text-center shadow-md md:w-[70%] m-auto bg-slate-100 p-6 text-[20px] pt-16 rounded-md mx-4 lg:mx-0;
+      }
+  
+      form textarea,
+      form input,
+      form select {
+        @apply outline-none w-[100%]  shadow-md px-4 py-4 mb-6;
+      }
+  
+      .updateBtn {
+        @apply bg-btn text-white font-bold hover:opacity-50 cursor-pointer;
+      }
+      .spinner {
+        @apply bg-btn p-5 text-white flex justify-center items-center text-[20px];
+      }
+      .updateLoader{
+        @apply bg-btn font-bold hover:opacity-50 cursor-pointer p-4 flex justify-center items-center
+      }
+    }
+  }
+
+  .displayMsg{
+    @apply hidden font-bold lg:flex lg:justify-center lg:items-center mt-[30%] text-gray-500 italic
+  }
+
+ 
+}
+.loader {
+  @apply flex flex-col justify-center items-center mt-48;
+}
+.error{
+  @apply text-gray-500 text-[22px] italic p-10;
+}

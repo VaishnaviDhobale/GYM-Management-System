@@ -1,0 +1,81 @@
+.container {
+  @apply p-0 sticky top-0 left-0 z-10 bg-white text-[25px];
+
+  .responsiveNav {
+    @apply p-0 relative;
+
+    .responsiveBox {
+      @apply bg-white z-20 w-full h-screen px-4 py-4 mt-6;
+
+      .subContainer1 {
+        @apply grid gap-6;
+      }
+
+      .subContainer2 {
+        @apply grid gap-6 mt-6;
+      }
+
+      .cross {
+        @apply bg-red-700 inline-block text-white font-bold text-[25px] p-2 rounded-lg absolute top-2 right-2;
+      }
+    }
+
+    .threeLines {
+      @apply font-bold text-[60px] lg:hidden hover:opacity-50 ml-4 relative top-4 left-[-5px];
+    }
+  }
+
+  .navContainer {
+    @apply hidden lg:grid lg:grid-cols-3 shadow-md pt-5 pb-5 mb-4 text-[19px];
+
+    .subContainer1 {
+      @apply flex justify-start items-center col-span-2;
+
+      .navlink {
+        @apply ml-5;
+      }
+    }
+
+    .subContainer2 {
+      @apply text-right mr-5 flex justify-end items-center;
+
+      .logout {
+        @apply ml-5;
+
+        .profile{
+          @apply h-[55px] w-[55px] rounded-full flex justify-center items-center ;
+
+          .profileImg{
+            @apply rounded-full w-full h-full
+          }
+        }
+      }
+
+      .profileBox{
+        @apply absolute top-[120px] shadow-md p-4 rounded-md cursor-pointer flex justify-center items-center gap-6 bg-white z-30 ;
+
+        .profileLogout{
+          @apply text-red-500 text-[30px] hover:opacity-25
+        }
+      }
+      
+
+      .addAdmin {
+        @apply bg-btn text-white px-2 py-3 rounded-md hover:bg-btnHover;
+      }
+    }
+
+    .navHover {
+      @apply hover:text-btnHover;
+    }
+  }
+}
+
+/* Ensure the underline class is directly accessible */
+.underline {
+  @apply border-b-4 border-b-btn transition-all duration-500 inline-block;
+}
+
+.active{
+  @apply text-btn font-bold;
+}

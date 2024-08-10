@@ -1,0 +1,37 @@
+.container {
+  @apply h-screen flex flex-col items-center justify-center font-sans mt-[-60px];
+
+  .heading {
+    @apply font-bold mb-[-20px] text-[25px];
+  }
+  .alreadyAccount {
+    @apply text-[17px];
+
+    .alreadyAccountSpan {
+      @apply text-[#0284c7] cursor-pointer hover:font-bold hover:text-[20px];
+    }
+  }
+
+  .form {
+    @apply p-6 shadow-xl max-sm:w-full lg:w-[35%] m-6 relative;
+
+    .inputs {
+      @apply p-[10px] w-full outline-none border border-solid mb-4 text-[18px];
+    }
+    .forPassword {
+      @apply absolute right-[35px] top-[170px] cursor-pointer text-[20px];
+    }
+    .forConfirmPassword {
+      @apply absolute right-[35px] top-[235px] cursor-pointer text-[20px];
+    }
+    .signUpBtn {
+      @apply p-2 text-center text-[20px] bg-btn hover:opacity-50 w-full cursor-pointer text-white font-bold;
+    }
+    .spinner {
+      @apply bg-btn p-5 text-white flex justify-center items-center text-[20px];
+    }
+  }
+}
+.error{
+  @apply text-gray-500 text-[22px] italic p-10;
+}

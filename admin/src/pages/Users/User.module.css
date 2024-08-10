@@ -1,0 +1,165 @@
+/*  Table  */
+.container {
+  @apply px-4 py-0;
+
+  .topContainer {
+    @apply md:flex justify-between items-center p-1 bg-white sticky top-[95px] mb-10 py-5;
+
+    .search {
+      @apply w-full md:w-[40%] mb-5 md:mb-0; 
+
+      .searchInput {
+        @apply border outline-none p-3 text-[19px] w-full rounded-md;
+      }
+    }
+
+    .blockUsersListBtn button {
+      @apply bg-btn text-white font-bold px-3 py-3 rounded-md hover:opacity-50 cursor-pointer;
+    }
+
+    .blockUsersListBtn {
+      @apply p-0 flex gap-3;
+
+      .allUsers {
+        @apply bg-gray-300 rounded-lg flex justify-center items-center px-4 py-1 font-bold;
+      }
+
+      .deleteAllBtn{
+        @apply bg-red-700
+      }
+    }
+  }
+  table {
+    @apply border-collapse w-[100%] mt-10;
+
+    thead {
+      @apply bg-btn text-white font-bold;
+    }
+
+    thead tr {
+      @apply p-5 border-b mb-5;
+    }
+    thead th {
+      @apply p-4;
+    }
+
+    /* tbody  */
+    .sendBtn {
+      @apply bg-btn px-3 py-1 text-white rounded-md hover:bg-btnHover;
+
+      .sendBtnIcon {
+        @apply flex justify-center items-center;
+      }
+    }
+
+    tbody tr .del {
+      @apply bg-red-700 px-3 py-2 rounded-md hover:bg-red-600;
+
+      .delIcon {
+        @apply text-white;
+      }
+    }
+
+    tbody tr .action {
+      @apply flex gap-10 justify-center;
+    }
+    
+    .unblockBtn {
+      @apply bg-green-900 text-white px-2 py-2 rounded-md cursor-pointer hover:opacity-50;
+    }
+
+    tbody th {
+      @apply p-[12px];
+    }
+
+    tbody {
+      @apply bg-gray-300;
+
+      .memberId {
+        @apply text-left;
+      }
+      .unblockBtn {
+        @apply bg-green-900 text-white px-2 py-2 rounded-md cursor-pointer hover:bg-green-800;
+      }
+    }
+  }
+}
+
+.noData{
+  @apply flex justify-center text-[30px] font-bold mt-20
+}
+
+/* This deisgn for when data not available */
+table {
+  @apply border-collapse w-[100%] mt-10;
+
+  thead {
+    @apply bg-btn text-white font-bold;
+  }
+
+  thead tr {
+    @apply p-5 border-b mb-5;
+  }
+  thead th {
+    @apply p-4;
+  }
+
+  /* tbody  */
+  .sendBtn {
+    @apply bg-btn px-3 py-1 text-white rounded-md hover:bg-btnHover;
+
+    .sendBtnIcon {
+      @apply flex justify-center items-center;
+    }
+  }
+
+  tbody tr .del {
+    @apply bg-red-700 px-3 py-2 rounded-md hover:bg-red-600;
+
+    .delIcon {
+      @apply text-white;
+    }
+  }
+
+  tbody tr .action {
+    @apply flex gap-10 justify-center;
+  }
+  
+  .unblockBtn {
+    @apply bg-green-900 text-white px-2 py-2 rounded-md cursor-pointer hover:opacity-50;
+  }
+
+  tbody th {
+    @apply p-[12px];
+  }
+
+  tbody {
+    @apply bg-gray-300;
+
+    .memberId {
+      @apply text-left;
+    }
+    .unblockBtn {
+      @apply bg-green-900 text-white px-2 py-2 rounded-md cursor-pointer hover:bg-green-800;
+    }
+  }
+}
+
+.noDataContainer {
+  @apply p-0;
+
+  .noDataDetails {
+    @apply flex flex-col justify-center items-center text-[30px] font-bold;
+    .blockListBtn {
+      @apply bg-btn text-white px-3 py-4 rounded-md cursor-pointer hover:opacity-50 text-[25px] mt-8;
+    }
+  }
+}
+
+.loader {
+  @apply flex flex-col justify-center items-center mt-48;
+}
+
+.error{
+  @apply text-gray-500 text-[22px] italic p-10;
+}

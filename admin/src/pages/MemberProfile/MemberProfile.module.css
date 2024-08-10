@@ -1,0 +1,148 @@
+.container {
+  @apply w-[100%] shadow-md m-auto p-10 pt-2 lg:grid lg:grid-cols-3 gap-10 ;
+
+  .chatHistory{
+    @apply bg-btn text-white font-bold text-[20px] px-5 py-1 rounded-md absolute top-6 right-6 z-10 hover:opacity-50 lg:hidden; 
+  }
+
+  .topContainer {
+    @apply p-0 max-h-[600px] overflow-y-auto pr-5 ;
+
+    .profileImg {
+      @apply p-6 col-span-1 border flex flex-col justify-center items-center mb-5;
+
+      .img {
+        @apply w-[250px] h-[250px] border rounded-full bg-slate-100;
+      }
+      .memberName {
+        @apply text-[40px] font-bold mt-5;
+      }
+      .email {
+        @apply font-semibold text-[20px];
+      }
+      .phone {
+        @apply font-semibold text-[20px];
+      }
+    }
+
+    .profileInfo {
+      @apply w-full p-5 border;
+
+      .paymentRecipt{
+        @apply bg-blue-400 text-white font-bold text-[20px] py-2 px-4 my-5 rounded-md hover:opacity-50
+      }
+
+      .membershipType {
+        @apply font-bold text-[25px];
+      }
+
+      .membershipType span {
+        @apply text-green-600;
+      }
+
+      .physicalInfo {
+        @apply p-0;
+
+        .allergies {
+          @apply mt-10;
+
+          .allergieHeading {
+            @apply font-bold text-[25px] mb-2;
+          }
+
+          .allergie {
+            @apply text-red-600 font-bold text-[20px] flex items-center gap-5;
+
+            .circle {
+              @apply text-[10px];
+            }
+          }
+        }
+
+        .medicals {
+          @apply mt-10;
+
+          .medicalHeading {
+            @apply font-bold text-[25px] mb-2;
+          }
+
+          .medical {
+            @apply text-orange-500 font-bold text-[20px] flex items-center gap-5;
+          }
+
+          .circle {
+            @apply text-[10px];
+          }
+        }
+      }
+
+      .startDate {
+        @apply pt-10 font-bold text-[13px] lg:text-[20px];
+      }
+
+      .startDate span {
+        @apply text-green-700;
+      }
+    }
+  }
+
+  .allMsgs {
+    @apply w-full col-span-2 h-auto mt-14 lg:mt-0 shadow-md  p-2;
+
+    .msgHeading {
+      @apply bg-gray-200 text-center font-bold text-[25px] py-3 sticky top-[110px];
+    }
+
+    .msgs {
+      @apply p-6 flex flex-col items-end border mt-4 rounded-md h-[420px] overflow-y-auto;
+
+      /* Hide the scrollbar */
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+
+      .adminMsg {
+        @apply cursor-pointer relative bg-green-400 p-2 mb-5 px-6 text-[20px] rounded-t-3xl rounded-l-3xl rounded-br-none max-w-[300px] self-end ;
+        white-space: pre-wrap; /* Keeps whitespace and wraps text */
+        word-wrap: break-word; /* Breaks long words and wraps them */
+        overflow-wrap: break-word; /* Breaks long words and wraps them */
+        hyphens: auto; /* Optional: Add hyphenation for better readability */
+
+      }
+
+      .userMsg {
+        @apply cursor-pointer relative bg-slate-100 p-2 px-6 mb-5 rounded-lg text-[20px] rounded-b-3xl rounded-r-3xl max-w-[300px] self-start;
+      }
+
+      .msgDelete{
+        @apply bg-red-600 absolute top-[-20px] left-0 mb-10 text-white font-bold p-2 rounded-t-2xl rounded-l-2xl hover:opacity-50 text-[30px];
+      }
+
+      /* .red{
+        @apply bg-red-700
+      } */
+    }
+
+    .sendMsgContainer {
+      @apply flex gap-3;
+
+      .sendMsg {
+        @apply p-3 w-full mt-4 border py-6 text-[19px] outline-none rounded-md;
+      }
+
+      .sendMsgBtn {
+        @apply bg-btn text-white p-3 mt-4 rounded-md cursor-pointer hover:opacity-50;
+
+        .btnIcon {
+          @apply font-bold text-[30px];
+        }
+      }
+    }
+  }
+}
+
+.loader {
+  @apply flex flex-col justify-center items-center mt-48;
+}
+.error{
+  @apply text-gray-500 text-[22px] italic p-10;
+}
