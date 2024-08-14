@@ -1,0 +1,7 @@
+.imageDiv {
+    @apply h-screen w-screen bg-no-repeat bg-center m-auto overflow-y-auto;
+  
+    background-size: cover; /* Ensures the entire image is visible without cropping */
+    background-position: center; /* Centers the image within the div */
+  }
+  
